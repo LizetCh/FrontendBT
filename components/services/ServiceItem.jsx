@@ -1,22 +1,19 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 const ServiceItem = ({service}) => {
   return (
-    <div className={styles.container}>
-      <h3 className={styles.title}>{service.title}</h3>
-      <p className={styles.description}>{service.description}</p>
+    <View style={styles.container}>
+      <Text style={styles.title}>{service.title}</Text>
+      <Text style={styles.description}>{service.description}</Text>
+      <Text style={styles.info}>Categoría: {service.category}</Text>
+      <Text style={styles.info}>Horas: {service.hours}</Text>
+      <Text style={styles.info}>Contacto: {service.contact}</Text>
+      <Text style={styles.info}>Ubicación: {service.location}</Text>
 
-      <div className={styles.info}>
-        <p><strong>Categoría:</strong> {service.category}</p>
-        <p><strong>Horas:</strong> {service.hours}</p>
-        <p><strong>Método de contacto:</strong> {service.contact}</p>
-        <p><strong>Ubicación:</strong> {service.location}</p>
-      </div>
-
-      <button className={styles.button} onClick={''}>
-        Ver más
-      </button>
-    </div>
+      <TouchableOpacity style={styles.button} onPress={''}>
+        <Text style={styles.buttonText}>Ver más</Text>
+      </TouchableOpacity>
+    </View>
   )
 }
 
@@ -24,25 +21,19 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 3,
-    transition: 'transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
+    padding: 20,
+    marginBottom: 0
   },
   title: {
     fontSize: 20,
+    fontWeight: 'bold',
     color: '#222',
     marginBottom: 6,
   },
   description: {
     fontSize: 15,
     color: '#555',
-    marginBottom: 12,
-    lineHeight: 1.4,
+    marginBottom: 12
   },
   info: {
     fontSize: 14,
@@ -55,10 +46,14 @@ const styles = StyleSheet.create({
     color: 'white',
     border: 'none',
     borderRadius: 8,
-    padding: '8px 14px',
-    cursor: 'pointer',
-    fontWeight: 500,
-    transition: 'background-color 0.2s ease',
+    padding: 10,
+    fontWeight: 500
+  },
+  buttonText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 16
   }
 
 })
