@@ -1,6 +1,6 @@
 import ServicesList from '@/components/services/ServicesList'
 import { useState } from 'react'
-import { View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 const ServiceScreen = () => {
 
