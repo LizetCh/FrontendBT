@@ -12,6 +12,19 @@ const ServiceScreen = () => {
     { id: 5, title: 'Clases de programación', description: 'Aprende a programar desde cero', category: 'Tecnología', hours: 5, contact: '949494949', location: 'Merida, Yuc' }
   ])
 
+  return (
+    <View style = {styles.container}   >
+    
+      <Text style={styles.titulo}>Banco de Tiempo</Text>
+      <input type="text" placeholder="Enter text here" />
+      <TouchableOpacity
+        style={styles.buton}
+       onPress={()=>router.push('./notes')}
+      >
+        <Text style={{color:'white', fontSize:18,}}>Miua</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
 
 
@@ -24,6 +37,7 @@ const ServiceScreen = () => {
   )
 
 }
+const styles = StyleSheet.create({
 
 export default ServiceScreen
 
