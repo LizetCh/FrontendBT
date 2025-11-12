@@ -3,37 +3,18 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 const ServiceItem = ({service}) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{service.title}</Text>
-      <Text style={styles.description}>{service.description}</Text>
-      
-      <View style={styles.infoContainer}>
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Categoría</Text>
-          <Text style={styles.infoValue}>{service.category}</Text>
-        </View>
+      <View style={styles.headerItem}>
+        <Text style={styles.category}>{service.category}</Text>
+        <Text style={styles.infoValue}>📍 {service.location}</Text>
         
-        <View style={styles.divider} />
-        
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Horas</Text>
-          <Text style={styles.infoValue}>{service.hours}</Text>
-        </View>
-        
-        <View style={styles.divider} />
-        
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Contacto</Text>
-          <Text style={styles.infoValue}>{service.contact}</Text>
-        </View>
-        
-        <View style={styles.divider} />
-        
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Ubicación</Text>
-          <Text style={styles.infoValue}>{service.location}</Text>
-        </View>
       </View>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>{service.title}</Text>
+        <Text style={styles.title}> {service.hours} hrs</Text>
 
+      </View>
+      
+      <Text style={styles.description}>{service.description}</Text>
       <TouchableOpacity style={styles.button} onPress={() => {}}>
         <Text style={styles.buttonText}>Ver más</Text>
       </TouchableOpacity>
@@ -53,6 +34,26 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 3,
   },
+  headerItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12
+  },
+  category: {
+    fontSize: 14,
+    backgroundColor: '#007AFF',
+    color: 'white',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8
+  },
   title: {
     fontSize: 22,
     fontWeight: '700',
@@ -65,35 +66,6 @@ const styles = StyleSheet.create({
     color: '#6B6B6B',
     marginBottom: 20,
     lineHeight: 22,
-  },
-  infoContainer: {
-    backgroundColor: '#F8F9FA',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 20,
-  },
-  infoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 10,
-  },
-  infoLabel: {
-    fontSize: 14,
-    color: '#7A7A7A',
-    fontWeight: '500',
-  },
-  infoValue: {
-    fontSize: 14,
-    color: '#1A1A1A',
-    fontWeight: '600',
-    flex: 1,
-    textAlign: 'right',
-    marginLeft: 16,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: '#E5E5E5',
   },
   button: {
     backgroundColor: '#1A1A1A',
