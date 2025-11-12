@@ -1,8 +1,10 @@
-import ServicesList from '@/components/services/ServicesList'
-import { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import ServicesList from '@/components/services/ServicesList';
+import { useRouter } from 'expo-router'; // Asegúrate de tener expo-router instalado
+import { useState } from 'react';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 const ServiceScreen = () => {
+  const router = useRouter()
 
   const [services, setServices] = useState([
     { id: 1, title: 'Clases de guitarra', description: 'Aprende a tocar la guitarra', category: 'Música', hours: 3, contact: '989898989', location: 'Merida, Yuc' },
@@ -13,31 +15,25 @@ const ServiceScreen = () => {
   ])
 
   return (
-    <View style = {styles.container}   >
-    
-      <Text style={styles.titulo}>Banco de Tiempo</Text>
-      <input type="text" placeholder="Enter text here" />
-      <TouchableOpacity
-        style={styles.buton}
-       onPress={()=>router.push('./notes')}
-      >
-        <Text style={{color:'white', fontSize:18,}}>Miua</Text>
-      </TouchableOpacity>
-    </View>
-  );
-
-
-
-
-  return (
     <View style={styles.container}>
-      <ServicesList services={services}/>
+      <Text style={styles.titulo}>Banco de Tiempo</Text>
+      
+      <TextInput 
+        style={styles.input}
+        placeholder="Buscar servicios..." 
+      />
+      
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => router.push('./notes')}
+      >
+        <Text style={styles.buttonText}>Miua</Text>
+      </TouchableOpacity>
 
+      <ServicesList services={services}/>
     </View>
   )
-
 }
-const styles = StyleSheet.create({
 
 export default ServiceScreen
 
@@ -47,11 +43,31 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#f5f5f5',
   },
-
-
+  titulo: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    color: '#333',
+  },
+  input: {
+    backgroundColor: 'white',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    fontSize: 16,
+  },
+  button: {
+    backgroundColor: '#007AFF',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: '600',
+  },
 })
-
-
-
-
-

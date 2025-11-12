@@ -5,12 +5,36 @@ const ServiceItem = ({service}) => {
     <View style={styles.container}>
       <Text style={styles.title}>{service.title}</Text>
       <Text style={styles.description}>{service.description}</Text>
-      <Text style={styles.info}>Categoría: {service.category}</Text>
-      <Text style={styles.info}>Horas: {service.hours}</Text>
-      <Text style={styles.info}>Contacto: {service.contact}</Text>
-      <Text style={styles.info}>Ubicación: {service.location}</Text>
+      
+      <View style={styles.infoContainer}>
+        <View style={styles.infoRow}>
+          <Text style={styles.infoLabel}>Categoría</Text>
+          <Text style={styles.infoValue}>{service.category}</Text>
+        </View>
+        
+        <View style={styles.divider} />
+        
+        <View style={styles.infoRow}>
+          <Text style={styles.infoLabel}>Horas</Text>
+          <Text style={styles.infoValue}>{service.hours}</Text>
+        </View>
+        
+        <View style={styles.divider} />
+        
+        <View style={styles.infoRow}>
+          <Text style={styles.infoLabel}>Contacto</Text>
+          <Text style={styles.infoValue}>{service.contact}</Text>
+        </View>
+        
+        <View style={styles.divider} />
+        
+        <View style={styles.infoRow}>
+          <Text style={styles.infoLabel}>Ubicación</Text>
+          <Text style={styles.infoValue}>{service.location}</Text>
+        </View>
+      </View>
 
-      <TouchableOpacity style={styles.button} onPress={''}>
+      <TouchableOpacity style={styles.button} onPress={() => {}}>
         <Text style={styles.buttonText}>Ver más</Text>
       </TouchableOpacity>
     </View>
@@ -19,43 +43,71 @@ const ServiceItem = ({service}) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 0
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 24,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 3,
   },
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#222',
-    marginBottom: 6,
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#1A1A1A',
+    marginBottom: 8,
+    letterSpacing: -0.3,
   },
   description: {
     fontSize: 15,
-    color: '#555',
-    marginBottom: 12
+    color: '#6B6B6B',
+    marginBottom: 20,
+    lineHeight: 22,
   },
-  info: {
+  infoContainer: {
+    backgroundColor: '#F8F9FA',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 20,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 10,
+  },
+  infoLabel: {
     fontSize: 14,
-    color: '#333',
-    marginBottom: 12,
+    color: '#7A7A7A',
+    fontWeight: '500',
   },
-
+  infoValue: {
+    fontSize: 14,
+    color: '#1A1A1A',
+    fontWeight: '600',
+    flex: 1,
+    textAlign: 'right',
+    marginLeft: 16,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#E5E5E5',
+  },
   button: {
-    backgroundColor: '#007bff',
-    color: 'white',
-    border: 'none',
-    borderRadius: 8,
-    padding: 10,
-    fontWeight: 500
+    backgroundColor: '#1A1A1A',
+    borderRadius: 10,
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    alignItems: 'center',
   },
   buttonText: {
-    color: '#fff',
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 16
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '600',
+    letterSpacing: 0.2,
   }
-
 })
 
 export default ServiceItem

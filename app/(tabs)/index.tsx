@@ -1,4 +1,5 @@
 import { Image } from 'expo-image';
+import { useState } from 'react';
 import { Platform, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 
@@ -9,6 +10,9 @@ import { ThemedView } from '@/components/themed-view';
 import { Link, router } from 'expo-router';
 
 export default function HomeScreen() {
+   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
