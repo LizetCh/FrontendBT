@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
   },
   category: {
     fontSize: 14,
-    backgroundColor: '#007AFF',
-    color: 'white',
+    backgroundColor: '#f3e283ff',
+    color: 'black',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   button: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#503FA7',
     borderRadius: 10,
     paddingVertical: 14,
     paddingHorizontal: 24,
