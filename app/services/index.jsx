@@ -27,7 +27,7 @@ const ServiceScreen = () => {
         style={styles.button}
         onPress={() => router.push('./notes')}
       >
-        <Text style={styles.buttonText}>Miua</Text>
+        <Text style={styles.buttonText}>Buscar</Text>
       </TouchableOpacity>
 
       <ServicesList services={services}/>
