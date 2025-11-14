@@ -1,3 +1,4 @@
+import { colors } from '@/constants/theme';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
@@ -91,13 +92,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     
-    backgroundColor: '#122191ff',
+    backgroundColor: '#503FA6',
   },
   scrollContent: {
     flexGrow: 1,
     justifyContent: 'center',
     padding: 10,
-    backgroundColor: '#707dd9ff',
+    backgroundColor: colors.background,
   },
   header: {
     alignItems: 'center',
