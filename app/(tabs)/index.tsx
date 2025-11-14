@@ -1,6 +1,7 @@
-import { router } from 'expo-router';
+import { colors, gradients } from '@/constants/theme';
 import { useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { GradientButton } from '../../components/createbtn';
 
 export default function HomeScreen() {
   const [email, setEmail] = useState('')
@@ -37,67 +38,69 @@ export default function HomeScreen() {
   }
 
   return (
- 
-      <ScrollView 
-        contentContainerStyle={styles.scrollContent}
-        keyboardShouldPersistTaps="handled"
-      >
-        <View style={styles.header}>
-          <Text style={styles.title}>Banco de Tiempo</Text>
-          <Text style={styles.subtitle}>Inicia sesión en tu cuenta</Text>
+    <ScrollView 
+      contentContainerStyle={styles.scrollContent}
+      keyboardShouldPersistTaps="handled"
+    >
+      <View style={styles.header}>
+        <Text style={styles.title}>Banco de Tiempo</Text>
+        <Text style={styles.subtitle}>Inicia sesión en tu cuenta</Text>
+      </View>
+
+      <View style={styles.form}>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Email</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="correo@ejemplo.com"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoComplete="email"
+            editable={!isLoading}
+          />
         </View>
 
-        <View style={styles.form}>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Email</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="correo@ejemplo.com"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoComplete="email"
-              editable={!isLoading}
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Contraseña</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="••••••••"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              autoCapitalize="none"
-              autoComplete="password"
-              editable={!isLoading}
-            />
-          </View>
-
-          <TouchableOpacity  style={styles.loginButton} onPress={() => router.push('./services') } >
-          <Text>Iniciar sesión</Text>
-        </TouchableOpacity>
-
-          
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Contraseña</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="••••••••"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            autoCapitalize="none"
+            autoComplete="password"
+            editable={!isLoading}
+          />
         </View>
-      </ScrollView>
-    
+
+        {/* Botón de Login con gradiente */}
+        <GradientButton 
+          title={isLoading ? "Iniciando sesión..." : "Iniciar Sesión"} 
+          onPress={handleLogin}
+          gradient={gradients.primary}
+          style={{ marginBottom: 16 }}
+        />
+
+        {/* Botón de Registro */}
+        <GradientButton 
+          title="Registrarse" 
+          onPress={handleRegister}
+          gradient={gradients.soft}
+        />
+      </View>
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    
-    backgroundColor: '#122191ff',
-  },
   scrollContent: {
     flexGrow: 1,
     justifyContent: 'center',
     padding: 10,
-    backgroundColor: '#707dd9ff',
+    backgroundColor: colors.darkest,
   },
   header: {
     alignItems: 'center',
@@ -106,14 +109,14 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#040405ff',
+    color: colors.lightest, // Cambiado para que se vea sobre fondo oscuro
     marginBottom: 8,
     fontFamily: 'Arial',
     textTransform: 'uppercase',
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: colors.light, // Cambiado para que se vea
   },
   form: {
     backgroundColor: 'white',
@@ -143,24 +146,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
   },
-  forgotPassword: {
-    alignSelf: 'flex-end',
-    marginBottom: 24,
-  },
-  loginButton: {
-    backgroundColor: '#007AFF',
-    borderRadius: 12,
-    padding: 16,
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  loginButtonDisabled: {
-    backgroundColor: '#99c9ff',
-  },
-  loginButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  
 })
