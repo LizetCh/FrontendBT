@@ -28,17 +28,37 @@ export const Colors = {
 };
 // colors.js
 export const colors = {
-  primary: '#007AFF',
-  secondary: '#5856D6',
-  background: '#FFFFFF',
-  text: '#000000',
-  textSecondary: '#8E8E93',
-  error: '#FF3B30',
-  success: '#34C759',
-  warning: '#FF9500',
-  border: '#C7C7CC',
+  // Colores principales
+  lightest: '#F0E9F2',
+  light: '#B9A3D9',
+  primary: '#5B38A6',
+  dark: '#4F328C',
+  darkest: '#392A59',
 };
 
+// Gradientes predefinidos
+export const gradients = {
+  // Gradiente principal (de más claro a más oscuro)
+  primary: [colors.light, colors.primary, colors.dark],
+  
+  // Gradiente suave
+  soft: [colors.lightest, colors.light],
+  
+  // Gradiente medio
+  medium: [colors.primary, colors.dark],
+  
+  // Gradiente intenso
+  intense: [colors.dark, colors.darkest],
+  
+  // Gradiente completo
+  full: [colors.lightest, colors.light, colors.primary, colors.dark, colors.darkest],
+  
+  // Gradiente vertical suave
+  verticalSoft: [colors.lightest, colors.primary],
+  
+  // Gradiente purple dream
+  dream: [colors.light, colors.primary, colors.darkest],
+};
 export const Fonts = Platform.select({
   ios: {
     /** iOS `UIFontDescriptorSystemDesignDefault` */
