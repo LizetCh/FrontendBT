@@ -1,4 +1,5 @@
 import { colors, gradients } from '@/constants/theme';
+import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { GradientButton } from '../../components/createbtn';
@@ -79,7 +80,7 @@ export default function HomeScreen() {
         {/* Botón de Login con gradiente */}
         <GradientButton 
           title={isLoading ? "Iniciando sesión..." : "Iniciar Sesión"} 
-          onPress={handleLogin}
+          onPress={() => router.push('./services')}
           gradient={gradients.primary}
           style={{ marginBottom: 16 }}
         />
