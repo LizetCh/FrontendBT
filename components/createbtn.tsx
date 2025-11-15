@@ -21,7 +21,7 @@ export const GradientButton = ({
 }: GradientButtonProps) => (
   <TouchableOpacity onPress={onPress} style={style}>
     <LinearGradient
-      colors={gradient as any} // ← Agrega "as any" para evitar el error de tipos
+      colors={gradient as any} 
       start={gradientDirections.horizontal.start}
       end={gradientDirections.horizontal.end}
       style={styles.button}

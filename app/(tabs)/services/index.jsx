@@ -1,7 +1,10 @@
 import ServicesList from '@/components/services/ServicesList';
-import { useRouter } from 'expo-router'; // Asegúrate de tener expo-router instalado
+import { colors, gradients } from '@/constants/theme';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { GradientButton } from '../../../components/createbtn';
+
 
 const ServiceScreen = () => {
   const router = useRouter()
@@ -23,12 +26,14 @@ const ServiceScreen = () => {
         placeholder="Buscar servicios..." 
       />
       
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => router.push('./notes')}
-      >
-        <Text style={styles.buttonText}>Buscar</Text>
-      </TouchableOpacity>
+        <GradientButton 
+          title="Buscar"
+          gradient={gradients.primary}
+          style={{ marginBottom: 16 }}
+        />
+
+
+
 
       <ServicesList services={services}/>
     </View>
@@ -40,14 +45,17 @@ export default ServiceScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 30,
     backgroundColor: '#f5f5f5',
+    marginTop: 20,
   },
   titulo: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
     color: '#333',
+    paddingTop: 12
+
   },
   input: {
     backgroundColor: 'white',
@@ -59,15 +67,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    backgroundColor: '#503FA7',
+    backgroundColor: colors.lightest,
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 16,
   },
   buttonText: {
-    color: 'white',
+    color: '#0000',
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '600'
   },
 })
