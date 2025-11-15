@@ -35,6 +35,7 @@ export const colors = {
   primary: '#5B38A6',
   dark: '#4F328C',
   darkest: '#392A59',
+  yellow :'#ecb605',
   
   // Colores complementarios
   white: '#FFFFFF',
@@ -54,7 +55,7 @@ export const gradients = {
   primary: [colors.light, colors.primary, colors.dark],
   
   // Gradiente suave
-  soft: [colors.lightest, colors.light],
+  soft: [ colors.yellow, colors.darkest],
   
   // Gradiente medio
   medium: [colors.primary, colors.dark],
