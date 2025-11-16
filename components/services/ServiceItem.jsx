@@ -47,8 +47,8 @@ const styles = StyleSheet.create({
   },
   category: {
     fontSize: 12,
-    backgroundColor: '#f3e283ff',
-    color: 'black',
+    backgroundColor: colors.yellow,
+    color: colors.buttonText,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8
