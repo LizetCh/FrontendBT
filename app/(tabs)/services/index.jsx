@@ -45,9 +45,14 @@ export default ServiceScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+<<<<<<< HEAD:app/services/index.jsx
+    padding: 16,
+    backgroundColor: '#ffffffff',
+=======
     padding: 30,
     backgroundColor: '#f5f5f5',
     marginTop: 20,
+>>>>>>> main:app/(tabs)/services/index.jsx
   },
   titulo: {
     fontSize: 24,
@@ -67,7 +72,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
+<<<<<<< HEAD:app/services/index.jsx
+    backgroundColor: 'colors.dark',
+=======
     backgroundColor: colors.lightest,
+>>>>>>> main:app/(tabs)/services/index.jsx
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',
