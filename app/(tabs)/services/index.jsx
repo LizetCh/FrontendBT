@@ -1,9 +1,8 @@
 import ServicesList from '@/components/services/ServicesList';
-import { gradients } from '@/constants/theme';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
-import { GradientButton } from '../../../components/createbtn';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { colors } from '../../../constants/theme';
 
 
 const ServiceScreen = () => {
@@ -21,25 +20,23 @@ const ServiceScreen = () => {
     <View style={styles.container}>
       <Text style={styles.titulo}>Banco de Tiempo</Text>
       
-      <TextInput 
-        style={styles.input}
-        placeholder="Buscar servicios..." 
-      />
       
-        <GradientButton 
-          title="Buscar"
-          gradient={gradients.primary}
-          style={{ marginBottom: 16 }}
-        />
 
 
 
 
       <ServicesList services={services}/>
+
+      <TouchableOpacity style={styles.addButton} onPress={() => {}}>
+        <Text style={styles.buttonText}>+</Text>
+      </TouchableOpacity>
+
+      {/*}
       <GradientButton
         style={styles.addButton}
         title="+"
       />
+      */}
     </View>
   )
 }
@@ -50,14 +47,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#ffffffff'
+    backgroundColor: colors.background,
   },
   titulo: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: 'bold',
     marginBottom: 16,
     color: '#333',
-    paddingTop: 12
+    marginTop: 30
 
   },
   input: {
@@ -70,7 +67,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   buttonText: {
-    color: '#0000',
+    color: 'white',
     fontSize: 18,
     fontWeight: '600'
   },
@@ -79,6 +76,7 @@ const styles = StyleSheet.create({
     bottom: 50,
     right: 50,
     width: 60,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: colors.primary,
   }
 })

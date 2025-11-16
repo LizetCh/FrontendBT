@@ -2,7 +2,7 @@ import { colors, gradients } from '@/constants/theme';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { GradientButton } from '../components/createbtn';
+import { GradientButton } from '../components/GradientButton';
 
 export default function HomeScreen() {
   const [email, setEmail] = useState('')
