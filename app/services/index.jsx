@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#ffffffff',
   },
   titulo: {
     fontSize: 24,
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    backgroundColor: '#503FA7',
+    backgroundColor: 'colors.dark',
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',
