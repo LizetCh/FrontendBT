@@ -2,41 +2,37 @@ import { colors, gradients } from '@/constants/theme';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { GradientButton } from '../../components/createbtn';
+import { GradientButton } from '../components/createbtn';
 
 export default function HomeScreen() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert('Error', 'Por favor complete todos los campos')
-      return
-    }
+const handleLogin = async () => {
+  if (!email || !password) {
+    Alert.alert('Error', 'Por favor complete todos los campos')
+    return
+  }
 
-    if (!email.includes('@')) {
-      Alert.alert('Error', 'Por favor ingresa un email válido')
-      return
-    }
+  if (!email.includes('@')) {
+    Alert.alert('Error', 'Por favor ingresa un email válido')
+    return
+  }
 
-    setIsLoading(true)
+  setIsLoading(true)
 
-    try {
-      setTimeout(() => {
-        setIsLoading(false)
-        Alert.alert('Éxito', `Bienvenido ${email}`)
-      }, 1500)
-    } catch (error) {
-      Alert.alert('Error', 'Ocurrió un error durante el inicio de sesión')
+  try {
+    setTimeout(() => {
       setIsLoading(false)
-    }
+      // Navega después del login exitoso
+      router.push('./services')
+    }, 1500)
+  } catch (error) {
+    Alert.alert('Error', 'Ocurrió un error durante el inicio de sesión')
+    setIsLoading(false)
   }
-
-  const handleRegister = () => {
-    Alert.alert('Registro', 'Ir a pantalla de registro')
-    // navigation.navigate('Register')
-  }
+}
 
   return (
     <ScrollView 
@@ -44,8 +40,9 @@ export default function HomeScreen() {
       keyboardShouldPersistTaps="handled"
     >
       <View style={styles.header}>
+        <Text style={styles.subtitle}>Bienvenid@ de nuevo</Text>
         <Text style={styles.title}>Banco de Tiempo</Text>
-        <Text style={styles.subtitle}>Inicia sesión en tu cuenta</Text>
+        
       </View>
 
       <View style={styles.form}>
@@ -77,19 +74,11 @@ export default function HomeScreen() {
           />
         </View>
 
-        {/* Botón de Login con gradiente */}
         <GradientButton 
           title={isLoading ? "Iniciando sesión..." : "Iniciar Sesión"} 
-          onPress={() => router.push('./services')}
-          gradient={gradients.primary}
+          onPress={handleLogin}
+          gradient={gradients.darkMode}
           style={{ marginBottom: 16 }}
-        />
-
-        {/* Botón de Registro */}
-        <GradientButton 
-          title="Registrarse" 
-          onPress={handleRegister}
-          gradient={gradients.soft}
         />
       </View>
     </ScrollView>
@@ -109,18 +98,18 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
-    color: colors.lightest, // Cambiado para que se vea sobre fondo oscuro
+    fontWeight: 800,
+    color: colors.yellow, 
     marginBottom: 8,
-    fontFamily: 'Arial',
     textTransform: 'uppercase',
   },
   subtitle: {
-    fontSize: 16,
-    color: colors.light, // Cambiado para que se vea
+    fontSize: 18,
+    color: colors.lightest, 
+    marginBottom: 12,
   },
   form: {
-    backgroundColor: 'white',
+    backgroundColor: colors.lightest,
     borderRadius: 16,
     padding: 24,
     shadowColor: '#000',
@@ -139,7 +128,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   input: {
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#87878729',
     borderWidth: 1,
     borderColor: '#e0e0e0',
     borderRadius: 12,
