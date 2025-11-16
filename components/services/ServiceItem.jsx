@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { GradientButton } from '../../components/createbtn';
+import { GradientButton } from '../GradientButton';
 
 const ServiceItem = ({service}) => {
   return (
@@ -18,6 +18,7 @@ const ServiceItem = ({service}) => {
       <Text style={styles.description}>{service.description}</Text>
       <GradientButton onPress={() => {}} //falta agregar la función del botón
         title="Ver más"
+
       />
     </View>
   )

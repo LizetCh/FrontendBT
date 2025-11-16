@@ -1,9 +1,8 @@
-// components/createbtn.tsx
+
 import { colors, gradientDirections, gradients } from '@/constants/theme';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet, Text, TextStyle, TouchableOpacity, ViewStyle } from 'react-native';
 
-// Define la interfaz con propiedades opcionales
 interface GradientButtonProps {
   onPress: () => void | Promise<void>;
   title: string;
@@ -22,8 +21,8 @@ export const GradientButton = ({
   <TouchableOpacity onPress={onPress} style={style}>
     <LinearGradient
       colors={gradient as any} 
-      start={gradientDirections.horizontal.start}
-      end={gradientDirections.horizontal.end}
+      start={gradientDirections.diagonal.start}
+      end={gradientDirections.diagonal.end}
       style={styles.button}
     >
       <Text style={[styles.text, textStyle]}>{title}</Text>
@@ -38,7 +37,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    color: colors.white,
+    color: colors.buttonText,
     fontSize: 16,
     fontWeight: '600',
   },
