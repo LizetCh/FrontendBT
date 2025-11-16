@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { GradientButton } from '../../components/createbtn';
 
 const ServiceItem = ({service}) => {
@@ -16,11 +16,8 @@ const ServiceItem = ({service}) => {
       </View>
       
       <Text style={styles.description}>{service.description}</Text>
-      <TouchableOpacity style={styles.button} onPress={() => {}}>
-        <Text style={styles.buttonText}>Ver más</Text>
-      </TouchableOpacity>
-      <GradientButton 
-        title="Solicitar Servicio"
+      <GradientButton onPress={() => {}} //falta agregar la función del botón
+        title="Ver más"
       />
     </View>
   )
@@ -71,13 +68,6 @@ const styles = StyleSheet.create({
     color: '#6B6B6B',
     marginBottom: 20,
     lineHeight: 22,
-  },
-  button: {
-    backgroundColor: '#503FA7',
-    borderRadius: 10,
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    alignItems: 'center',
   },
   buttonText: {
     color: '#FFFFFF',

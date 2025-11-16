@@ -1,5 +1,5 @@
 import ServicesList from '@/components/services/ServicesList';
-import { colors, gradients } from '@/constants/theme';
+import { gradients } from '@/constants/theme';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
@@ -36,6 +36,10 @@ const ServiceScreen = () => {
 
 
       <ServicesList services={services}/>
+      <GradientButton
+        style={styles.addButton}
+        title="+"
+      />
     </View>
   )
 }
@@ -45,14 +49,8 @@ export default ServiceScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-<<<<<<< HEAD:app/services/index.jsx
     padding: 16,
-    backgroundColor: '#ffffffff',
-=======
-    padding: 30,
-    backgroundColor: '#f5f5f5',
-    marginTop: 20,
->>>>>>> main:app/(tabs)/services/index.jsx
+    backgroundColor: '#ffffffff'
   },
   titulo: {
     fontSize: 24,
@@ -71,20 +69,16 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     fontSize: 16,
   },
-  button: {
-<<<<<<< HEAD:app/services/index.jsx
-    backgroundColor: 'colors.dark',
-=======
-    backgroundColor: colors.lightest,
->>>>>>> main:app/(tabs)/services/index.jsx
-    padding: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginBottom: 16,
-  },
   buttonText: {
     color: '#0000',
     fontSize: 18,
     fontWeight: '600'
   },
+  addButton: {
+    position: 'absolute',
+    bottom: 50,
+    right: 50,
+    width: 60,
+    justifyContent: 'center'
+  }
 })
