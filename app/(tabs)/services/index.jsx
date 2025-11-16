@@ -2,6 +2,7 @@ import ServicesList from '@/components/services/ServicesList';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from '../../../constants/theme';
 
 
@@ -17,27 +18,31 @@ const ServiceScreen = () => {
   ])
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.titulo}>Banco de Tiempo</Text>
-      
-      
+
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+
+      <View style={styles.container}>
+        <Text style={styles.titulo}>Banco de Tiempo</Text>
+        
+        
 
 
 
 
-      <ServicesList services={services}/>
+        <ServicesList services={services}/>
 
-      <TouchableOpacity style={styles.addButton} onPress={() => {}}>
-        <Text style={styles.buttonText}>+</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.addButton} onPress={() => {}}>
+          <Text style={styles.buttonText}>+</Text>
+        </TouchableOpacity>
 
-      {/*}
-      <GradientButton
-        style={styles.addButton}
-        title="+"
-      />
-      */}
-    </View>
+        {/*}
+        <GradientButton
+          style={styles.addButton}
+          title="+"
+        />
+        */}
+      </View>
+    </SafeAreaView>
   )
 }
 
@@ -53,8 +58,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     marginBottom: 16,
-    color: '#333',
-    marginTop: 30
+    color: '#333'
 
   },
   input: {
@@ -68,15 +72,17 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-    fontSize: 18,
-    fontWeight: '600'
+    fontSize: 32
   },
   addButton: {
     position: 'absolute',
-    bottom: 50,
-    right: 50,
-    width: 60,
+    bottom: 30,
+    right: 30,
     justifyContent: 'center',
-    backgroundColor: colors.primary,
+    alignItems: 'center',
+    backgroundColor: colors.yellow,
+    height: 70,
+    width: 70,
+    borderRadius: 40
   }
 })

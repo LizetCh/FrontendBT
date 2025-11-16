@@ -4,7 +4,7 @@ import { FlatList, View } from 'react-native'
 const ServicesList = ({services}) => {
   return (
     <View>
-      <FlatList
+      <FlatList 
         data={services}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({item}) => (
