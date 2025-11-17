@@ -3,11 +3,14 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AddServiceModal from '../../../components/services/AddServiceModal';
 import { colors } from '../../../constants/theme';
 
 
 const ServiceScreen = () => {
   const router = useRouter()
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   const [services, setServices] = useState([
     { id: 1, title: 'Clases de guitarra', description: 'Aprende a tocar la guitarra', category: 'Música', hours: 3, contact: '989898989', location: 'Merida, Yuc' },
@@ -17,6 +20,11 @@ const ServiceScreen = () => {
     { id: 5, title: 'Clases de programación', description: 'Aprende a programar desde cero', category: 'Tecnología', hours: 5, contact: '949494949', location: 'Merida, Yuc' }
   ])
 
+  //función para mostrar el modal de agregar servicio
+  const showAddServiceModal = () => {
+      setModalVisible(true);
+  };
+
   return (
 
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -24,23 +32,24 @@ const ServiceScreen = () => {
       <View style={styles.container}>
         <Text style={styles.titulo}>Banco de Tiempo</Text>
         
-        
+        {/*modal para agregar un nuevo servicio */}
+        <AddServiceModal
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          onAddService={(newService) => {
+            setServices([...services, { id: services.length + 1, ...newService }]);
+          }}
+        />
 
 
 
 
         <ServicesList services={services}/>
 
-        <TouchableOpacity style={styles.addButton} onPress={() => {}}>
+        <TouchableOpacity style={styles.addButton} onPress={() => showAddServiceModal()}>
           <Text style={styles.buttonText}>+</Text>
         </TouchableOpacity>
 
-        {/*}
-        <GradientButton
-          style={styles.addButton}
-          title="+"
-        />
-        */}
       </View>
     </SafeAreaView>
   )
