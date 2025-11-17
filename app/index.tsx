@@ -88,8 +88,8 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     justifyContent: 'center',
-    padding: 10,
-    backgroundColor: colors.darkest,
+    padding: 30,
+    backgroundColor: colors.lightest,
   },
   header: {
     alignItems: 'center',
@@ -98,17 +98,17 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: 800,
-    color: colors.yellow, 
+    color: colors.dark, 
     marginBottom: 8,
     textTransform: 'uppercase',
   },
   subtitle: {
     fontSize: 18,
-    color: colors.lightest, 
+    color: colors.primary, 
     marginBottom: 12,
   },
   form: {
-    backgroundColor: colors.lightest,
+    backgroundColor: 'white',
     borderRadius: 16,
     padding: 24,
     shadowColor: '#000',
@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 3,
+    marginBottom: 100,
   },
   inputContainer: {
     marginBottom: 20,
