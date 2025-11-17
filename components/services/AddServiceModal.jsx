@@ -13,6 +13,20 @@ const AddServiceModal = ({ visible, onClose, onAddService }) => {
   const [hours, setHours] = useState('');
 
   const handleAddService = () => {
+    //revisar que todos los campos estén llenos
+    if (!title || !description || !category || !location || !hours) {
+      alert('Por favor, completa todos los campos.');
+      return;
+    }
+
+    //revisar que las horas sean un número válido
+    const hoursNumber = parseFloat(hours);
+    if (isNaN(hoursNumber) || hoursNumber <= 0) {
+      alert('Por favor, ingresa un número válido de horas.');
+      return;
+    }
+    
+
     const newService = { title, description, category, location, hours };
     onAddService(newService);
     setTitle('');
