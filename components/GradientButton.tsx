@@ -23,7 +23,7 @@ export const GradientButton = ({
       colors={gradient as any} 
       start={gradientDirections.diagonal.start}
       end={gradientDirections.diagonal.end}
-      style={styles.button}
+      style={[styles.button, style]}
     >
       <Text style={[styles.text, textStyle]}>{title}</Text>
     </LinearGradient>

@@ -1,4 +1,4 @@
-import { colors, gradients } from '@/constants/theme';
+import { colors } from '@/constants/theme';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
@@ -77,7 +77,6 @@ const handleLogin = async () => {
         <GradientButton 
           title={isLoading ? "Iniciando sesión..." : "Iniciar Sesión"} 
           onPress={handleLogin}
-          gradient={gradients.darkMode}
           style={{ marginBottom: 16 }}
         />
       </View>

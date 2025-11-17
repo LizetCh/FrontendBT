@@ -1,3 +1,4 @@
+import { colors } from '@/constants/theme';
 import { StyleSheet, Text, View } from 'react-native';
 import { GradientButton } from '../GradientButton';
 
@@ -18,6 +19,7 @@ const ServiceItem = ({service}) => {
       <Text style={styles.description}>{service.description}</Text>
       <GradientButton onPress={() => {}} //falta agregar la función del botón
         title="Ver más"
+        textStyle={styles.buttonText}
 
       />
     </View>
@@ -26,27 +28,27 @@ const ServiceItem = ({service}) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background,
     borderRadius: 16,
     padding: 24,
-    marginBottom: 16,
+    marginBottom: 14,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 3,
-    borderWidth: 0.2,
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    borderWidth: 0.4,
+    borderColor: '#a6a6a6ff',
+    gap: 10
   },
   headerItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12
   },
   category: {
-    fontSize: 14,
-    backgroundColor: '#f3e283ff',
-    color: 'black',
+    fontSize: 12,
+    backgroundColor: colors.yellow,
+    color: colors.buttonText,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8
@@ -54,27 +56,23 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8
+    alignItems: 'center'
   },
   title: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: '700',
     color: '#1A1A1A',
-    marginBottom: 8,
     letterSpacing: -0.3,
   },
   description: {
-    fontSize: 15,
+    fontSize: 14,
     color: '#6B6B6B',
-    marginBottom: 20,
-    lineHeight: 22,
+    marginBottom: 12
   },
   buttonText: {
     color: '#FFFFFF',
-    fontSize: 15,
-    fontWeight: '600',
-    letterSpacing: 0.2,
+    fontSize: 12,
+    fontWeight: '600'
   }
 })
 
