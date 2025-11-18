@@ -1,8 +1,10 @@
 import { colors } from '@/constants/theme';
+import { useRouter } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 import { GradientButton } from '../GradientButton';
 
 const ServiceItem = ({service}) => {
+  const router = useRouter();  
   return (
     <View style={styles.container}>
       <View style={styles.headerItem}>
@@ -17,7 +19,10 @@ const ServiceItem = ({service}) => {
       </View>
       
       <Text style={styles.description}>{service.description}</Text>
-      <GradientButton onPress={() => {}} //falta agregar la función del botón
+      <GradientButton onPress={() => router.push({
+        pathname: "/services/serviceInfo",
+            params: { id: service.id }
+      })}
         title="Ver más"
         textStyle={styles.buttonText}
 
