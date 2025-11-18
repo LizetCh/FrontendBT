@@ -6,18 +6,44 @@ import { StyleSheet, Text, View } from "react-native";
 
 const ServiceInfoItem = ({ service }) => {
 
+  // si no hay servicio, mostrar mensaje de error
+  if (!service) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Servicio no encontrado</Text>
+      </View>
+    );
+  }
+
+  //default values
+  const {
+    title = "",
+    description = "",
+    category = [],
+    hours = "",
+    location = "",
+    contact = "No disponible",
+    providerName = "Usuario",
+    providerRating = 0,
+    providerBio = "Sin biografía",
+    providerSkills = [],
+    id
+    } = service;
+
+
+
     const serviceReviews = reviewsData
-    .filter(r => r.serviceId === service.id)
+    .filter(r => r.serviceId === id)
     .slice(0, 5);
 
   return (
     <View style={styles.container}>
 
-      <Text style={styles.title}>{service.title}</Text>
+      <Text style={styles.title}>{title}</Text>
 
     {/*Categorias listadas*/}
       <View style={styles.categoryContainer}>
-        {service.category.map((cat, index) => (
+        {category.map((cat, index) => (
           <Text key={index} style={styles.categoryChip}>
             {cat}
           </Text>
@@ -25,7 +51,7 @@ const ServiceInfoItem = ({ service }) => {
       </View>
     {/*Descripción del servicio*/}
       <Text style={styles.description}>
-        {service.description}
+        {description}
       </Text>
 
       <View style={styles.separator} />
@@ -37,7 +63,7 @@ const ServiceInfoItem = ({ service }) => {
           <Ionicons name="time-outline" size={28} color="black" />
           <View style={styles.infoBlock}>
             <Text style={styles.infoLabel}>Horas requeridas</Text>
-            <Text style={styles.infoValue}>{service.hours} hrs</Text>
+            <Text style={styles.infoValue}>{hours} hrs</Text>
           </View>
         </View>
     {/*Ubicación del servicio*/}
@@ -45,7 +71,7 @@ const ServiceInfoItem = ({ service }) => {
           <Ionicons name="location-outline" size={28} color="black" />
           <View style={styles.infoBlock}>
             <Text style={styles.infoLabel}>Ubicación</Text>
-            <Text style={styles.infoValue}>{service.location}</Text>
+            <Text style={styles.infoValue}>{location}</Text>
           </View>
         </View>
     {/*Contecto*/}
@@ -53,7 +79,7 @@ const ServiceInfoItem = ({ service }) => {
           <Ionicons name="call-outline" size={28} color="black" />
           <View style={styles.infoBlock}>
             <Text style={styles.infoLabel}>Contacto</Text>
-            <Text style={styles.infoValue}>{service.contact}</Text>
+            <Text style={styles.infoValue}>{contact}</Text>
           </View>
         </View>
       </View>
@@ -62,17 +88,17 @@ const ServiceInfoItem = ({ service }) => {
 
       {/*Tarjeta del proveedor*/}
       <View style={styles.providerCard}>
-        <Text style={styles.providerName}>{service.providerName}</Text>
+        <Text style={styles.providerName}>{providerName}</Text>
 
         <View style={styles.ratingRow}>
           <Ionicons name="star" size={20} color="#FFD700" />
-          <Text style={styles.ratingText}>{service.providerRating}</Text>
+          <Text style={styles.ratingText}>{providerRating}</Text>
         </View>
       </View>
 
 
       <Text style={styles.sectionTitle}>Biografía</Text>
-      <Text style={styles.bioText}>{service.providerBio}</Text>
+      <Text style={styles.bioText}>{providerBio}</Text>
 
 
       <View style={styles.separator} />
@@ -80,7 +106,7 @@ const ServiceInfoItem = ({ service }) => {
 
       <Text style={styles.sectionTitle}>Habilidades</Text>
       <View style={styles.skillsContainer}>
-        {service.providerSkills.map((skill, index) => (
+        {providerSkills.map((skill, index) => (
             <Text key={index} style={styles.skillChip}>
             {skill}
             </Text>

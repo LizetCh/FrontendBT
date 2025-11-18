@@ -32,7 +32,7 @@ const ServiceItem = ({service}) => {
       </Text>
       <GradientButton onPress={() => router.push({
         pathname: "/services/serviceInfo",
-            params: { id: service.id }
+        params: { service: JSON.stringify(service) }
       })}
         title="Ver más"
         textStyle={styles.buttonText}

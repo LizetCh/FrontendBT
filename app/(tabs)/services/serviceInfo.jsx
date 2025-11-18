@@ -2,12 +2,12 @@ import ServiceInfoItem from "@/components/services/ServiceInfoItem";
 import { useLocalSearchParams } from "expo-router";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { servicesData } from "../../../constants/servicesData";
 import { colors } from '../../../constants/theme';
 
 const ServiceInfo = () => {
-  const { id } = useLocalSearchParams();
-  const service = servicesData.find((s) => s.id === Number(id));
+  const { service } = useLocalSearchParams();
+  const parsedService = JSON.parse(service);
+
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -18,7 +18,7 @@ const ServiceInfo = () => {
         <View style={styles.separator} />
 
         <ScrollView>
-          <ServiceInfoItem service={service} />
+          <ServiceInfoItem service={parsedService} />
         </ScrollView>
       </View>
     </SafeAreaView>
