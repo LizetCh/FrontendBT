@@ -8,13 +8,13 @@ import { GradientButton } from '../GradientButton';
 const AddServiceModal = ({ visible, onClose, onAddService }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
+  const [categoriesString, setCategoriesString] = useState('');
   const [location, setLocation] = useState('');
   const [hours, setHours] = useState('');
 
   const handleAddService = () => {
     //revisar que todos los campos estén llenos
-    if (!title || !description || !category || !location || !hours) {
+    if (!title || !description || !categoriesString || !location || !hours) {
       alert('Por favor, completa todos los campos.');
       return;
     }
@@ -25,13 +25,16 @@ const AddServiceModal = ({ visible, onClose, onAddService }) => {
       alert('Por favor, ingresa un número válido de horas.');
       return;
     }
-    
 
+    //guardar categprías como array (las palabras están separadas por comas)
+    const category = categoriesString.split(',').map(item => item.trim());
+
+    //crear nuevo servicio
     const newService = { title, description, category, location, hours };
     onAddService(newService);
     setTitle('');
     setDescription('');
-    setCategory('');
+    setCategoriesString('');
     setLocation('');
     setHours('');
     onClose();
@@ -62,13 +65,14 @@ const AddServiceModal = ({ visible, onClose, onAddService }) => {
             value={description}
             onChangeText={setDescription}
           />
-          <Text>Categoría</Text>
+          <Text>Categoría (Separar por comas)</Text>
           <TextInput
             style={styles.input}
-            placeholder="Ej. Educación"
+            placeholder="Ej. Educación, Tecnología"
             placeholderTextColor="#999"
-            value={category}
-            onChangeText={setCategory}
+            //string separado por comas
+            value={categoriesString}
+            onChangeText={setCategoriesString}
           />
           <Text>Ubicación</Text>
           <TextInput
