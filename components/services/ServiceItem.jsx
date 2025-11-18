@@ -3,12 +3,20 @@ import { useRouter } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 import { GradientButton } from '../GradientButton';
 
+
 const ServiceItem = ({service}) => {
   const router = useRouter();  
   return (
     <View style={styles.container}>
       <View style={styles.headerItem}>
-        <Text style={styles.category}>{service.category}</Text>
+        
+        {/*render de varias categorías*/}
+        <View style={{flexDirection: 'row', gap: 6}}>
+          {service.category.map((item, index) => (
+            <Text key={index} style={styles.category}>{item}</Text>
+          ))}
+        </View>
+       
         <Text style={styles.infoValue}>📍 {service.location}</Text>
         
       </View>
@@ -18,7 +26,10 @@ const ServiceItem = ({service}) => {
 
       </View>
       
-      <Text style={styles.description}>{service.description}</Text>
+      {/*trim description to 15 words*/}
+      <Text style={styles.description}>{
+        service.description.split(" ").length > 15 ? service.description.split(" ").slice(0, 15).join(" ") + " ..." : service.description}
+      </Text>
       <GradientButton onPress={() => router.push({
         pathname: "/services/serviceInfo",
             params: { id: service.id }
@@ -61,13 +72,14 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'flex-start',
   },
   title: {
     fontSize: 18,
     fontWeight: '700',
     color: '#1A1A1A',
     letterSpacing: -0.3,
+    maxWidth: '75%'
   },
   description: {
     fontSize: 14,

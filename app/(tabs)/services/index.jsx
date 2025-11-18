@@ -1,25 +1,20 @@
 import ServicesList from '@/components/services/ServicesList';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AddServiceModal from '../../../components/services/AddServiceModal';
+import { servicesData } from '../../../constants/servicesData';
 import { colors } from '../../../constants/theme';
 
 
 const ServiceScreen = () => {
-  const router = useRouter()
 
   const [modalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   const [services, setServices] = useState([
-    { id: 1, title: 'Clases de guitarra', description: 'Aprende a tocar la guitarra', category: 'Música', hours: 3, contact: '989898989', location: 'Merida, Yuc' },
-    { id: 2, title: 'Clases de cocina', description: 'Aprende a cocinar platillos deliciosos', category: 'Cocina', hours: 2, contact: '979797979', location: 'Merida, Yuc' },
-    { id: 3, title: 'Clases de yoga', description: 'Mejora tu bienestar físico y mental', category: 'Salud', hours: 1.5, contact: '969696969', location: 'Merida, Yuc' },
-    { id: 4, title: 'Clases de fotografía', description: 'Captura momentos inolvidables', category: 'Arte', hours: 4, contact: '959595959', location: 'Merida, Yuc' },
-    { id: 5, title: 'Clases de programación', description: 'Aprende a programar desde cero', category: 'Tecnología', hours: 5, contact: '949494949', location: 'Merida, Yuc' }
+    ...servicesData
   ])
 
   //filtrar servicios segun la búsqueda
@@ -28,7 +23,7 @@ const ServiceScreen = () => {
     return (
       service.title.toLowerCase().includes(query) ||
       service.description.toLowerCase().includes(query) ||
-      service.category.toLowerCase().includes(query) ||
+      service.category.some(item => item.toLowerCase().includes(query)) ||
       service.location.toLowerCase().includes(query)
     );
   });
