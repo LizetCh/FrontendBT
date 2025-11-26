@@ -2,7 +2,7 @@ import { colors } from '@/constants/theme';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { GradientButton } from '../components/GradientButton';
+import { GradientButton, WhiteGradientButton } from '../components/GradientButton';
 
 export default function HomeScreen() {
   const [email, setEmail] = useState('')
@@ -79,12 +79,31 @@ const handleLogin = async () => {
           onPress={handleLogin}
           style={{ marginBottom: 16 }}
         />
+
+        <WhiteGradientButton 
+          title={isLoading ? "Iniciando sesión..." : "Iniciar Sesión"} 
+          onPress={handleLogin}
+          style={{ marginBottom: 16 }}
+        />
+
+
       </View>
     </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
+  create:{
+    backgroundColor: colors.light,
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+  },
+  createText:{
+  color: colors.dark,
+  fontSize: 16,
+    fontWeight: '600',
+  },
   scrollContent: {
     flexGrow: 1,
     justifyContent: 'center',

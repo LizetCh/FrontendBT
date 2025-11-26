@@ -48,6 +48,8 @@ export const colors = {
 export const gradients = {
   
   primary: [colors.light, colors.primary, colors.darkest],
+  white: ['#FFFFFF', '#F5F5F7'],  
+
   
 };
 
