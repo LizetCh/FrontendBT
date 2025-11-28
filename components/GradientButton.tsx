@@ -68,7 +68,7 @@ export const WhiteGradientButton = ({
 const styles = StyleSheet.create({
   button: {
     borderRadius: 12,
-    padding: 16,
+    padding: 12,
     alignItems: 'center',
   },
   text: {
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   whiteButton: {
     borderRadius: 12,
-    padding: 16,
+    padding: 12,
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#E0E0E0', // borde sutil para destacar sobre fondo blanco

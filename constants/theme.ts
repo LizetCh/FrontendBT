@@ -35,7 +35,7 @@ export const colors = {
   primary: '#5B38A6',
   dark: '#4F328C',
   darkest: '#392A59',
-  yellow :'#ecb605',
+  yellow :'#f6a705',
   
   //colores de fondo y texto
   background: '#ffffffff',
