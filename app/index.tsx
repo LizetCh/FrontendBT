@@ -34,6 +34,10 @@ const handleLogin = async () => {
   }
 }
 
+const handleGoToRegister = () => {
+  router.push('./register')
+}
+
   return (
     <ScrollView 
       contentContainerStyle={styles.scrollContent}
@@ -77,12 +81,15 @@ const handleLogin = async () => {
         <GradientButton 
           title={isLoading ? "Iniciando sesión..." : "Iniciar Sesión"} 
           onPress={handleLogin}
-          style={{ marginBottom: 16 }}
+          style={{ marginBottom: 8 }}
         />
 
+            <View style={styles.createWrapper}>
+          <Text style={styles.createPrompt}>¿Aún no tienes una cuenta?</Text>
+        </View>
         <WhiteGradientButton 
-          title={isLoading ? "Iniciando sesión..." : "Iniciar Sesión"} 
-          onPress={handleLogin}
+          title={isLoading ? "Creando cuenta..." : "Crear Cuenta"} 
+          onPress={handleGoToRegister}
           style={{ marginBottom: 16 }}
         />
 
@@ -93,6 +100,15 @@ const handleLogin = async () => {
 }
 
 const styles = StyleSheet.create({
+  createWrapper: {
+    marginTop: 1,
+    alignItems: 'center',
+  },
+  createPrompt: {
+    fontSize: 14,
+    color: colors.dark,
+    marginBottom: 5,
+  },
   create:{
     backgroundColor: colors.light,
     borderRadius: 12,
