@@ -9,6 +9,13 @@ const ServiceItem = ({service}) => {
   return (
     <View style={styles.container}>
       <View style={styles.headerItem}>
+
+        <View>
+          <View style={style.userContainer}>
+            <Img src={service.userAvatar} style={style.userAvatar} />
+          </View>
+          <Text style={style.userName}>{service.userName}</Text>
+        </View>
         
         {/*render de varias categorías*/}
         <View style={{flexDirection: 'row', gap: 6}}>
