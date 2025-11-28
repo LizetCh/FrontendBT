@@ -1,16 +1,20 @@
 import { colors } from '@/constants/theme';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { api } from '../api/axiosInstance';
 import { GradientButton } from '../components/GradientButton';
+
 
 export default function RegisterScreen() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const[loading, setLoading] = useState(false);
 
-  const handleRegister = () => {
+  const handleRegister = async  () => {
     if (!name || !email || !password || !confirmPassword){
       Alert.alert('Error','Todos los campos son obligatorios');
       return;
@@ -19,7 +23,39 @@ export default function RegisterScreen() {
     {
       Alert.alert('Error', 'Las contraseñas no coinciden');
     }
-  }
+    try{
+      setLoading(true);
+
+      const reponse = await api.post('users/create',{
+        name,email, password
+      });
+      const data= reponse.data;
+
+      if (!data.token){
+        Alert.alert ('Error', 'No se recibió token del servidor');
+        return;
+      }
+      //Guardar JWT 
+      await AsyncStorage.setItem('authToken', data.token);
+
+      Alert.alert('Cuenta creada', 'Tu cuenta ha sido creada correctamente',[
+        {
+          text:'Continuar',
+          onPress: () => {
+            router.replace('/')
+          },
+        },
+      ]);
+    } catch (error:any){
+      console.log('Error en registro', error?.response?.data ||error.message );
+
+      const msgBackend =
+        error?.response.data?.error || 'No se pudo crear la cuenta';
+        Alert.alert('Error', msgBackend);
+    }finally{
+      setLoading(false);
+    }
+  };
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <TouchableOpacity
@@ -31,7 +67,7 @@ export default function RegisterScreen() {
       <View style={styles.card}>
         <Text style={styles.title}>Crear cuenta</Text>
         <Text style={styles.subtitle}>
-          Completa los datos
+          Ingresa tus datos correctamente
         </Text>
 
         <TextInput
@@ -94,7 +130,7 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 16,
-    color: colors.primary,
+    color: colors.darkest,
     fontWeight: '600',
   },
   card: {
@@ -127,7 +163,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 14,
     backgroundColor: '#f8f8f8',
-    fontSize: 18,
+    fontSize: 15,
     color: colors.dark,
   },
 });
