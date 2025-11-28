@@ -1,6 +1,6 @@
 import { colors } from '@/constants/theme';
 import { useRouter } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { GradientButton } from '../GradientButton';
 
 
@@ -11,15 +11,19 @@ const ServiceItem = ({service}) => {
       <View style={styles.headerItem}>
 
         <View>
-          <View style={style.userContainer}>
-            <Img src={service.userAvatar} style={style.userAvatar} />
+          
+          <View style={styles.userContainer}>
+            {/*default user image*/}
+            <Image source={require('@/assets/images/user-default-img.jpg')}  style={styles.userImage}/>
           </View>
-          <Text style={style.userName}>{service.userName}</Text>
+          
+          <Text style={styles.userName}>{service.userName}</Text>
         </View>
         
         {/*render de varias categorías*/}
         <View style={{flexDirection: 'row', gap: 6}}>
-          {service.category.map((item, index) => (
+          {/*get categories if not undefined*/}
+          {service.categories && service.categories.map((item, index) => (
             <Text key={index} style={styles.category}>{item}</Text>
           ))}
         </View>
@@ -68,6 +72,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  userContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    overflow: 'hidden',
+    marginBottom: 4,
+  },
+  userImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  userName: {
   category: {
     fontSize: 12,
     backgroundColor: colors.yellow,
@@ -97,7 +114,8 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 12,
     fontWeight: '600'
-  }
-})
+  },
+}
+});
 
 export default ServiceItem
