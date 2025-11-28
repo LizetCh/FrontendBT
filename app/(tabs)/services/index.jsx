@@ -1,10 +1,10 @@
 import ServicesList from '@/components/services/ServicesList';
 import { Ionicons } from '@expo/vector-icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { api } from '../../../api/axiosInstance';
 import AddServiceModal from '../../../components/services/AddServiceModal';
-import { servicesData } from '../../../constants/servicesData';
 import { colors } from '../../../constants/theme';
 
 
@@ -13,9 +13,23 @@ const ServiceScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const [services, setServices] = useState([
-    ...servicesData
-  ])
+  const [services, setServices] = useState([])
+
+  //obtener servicios desde el backend
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const res = await api.get("/services");
+        setServices(res.data);
+        console.log("Servicios obtenidos:", res.data);
+      } catch (error) {
+        console.log("Hubo un error al obtener los servicios:", error.message);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
 
   //filtrar servicios segun la búsqueda
   const filteredServices = services.filter(service => {

@@ -6,7 +6,7 @@ const ServicesList = ({services}) => {
     <View>
       <FlatList 
         data={services}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item._id.toString()}
         renderItem={({item}) => (
           <ServiceItem service={item} />
         )}
