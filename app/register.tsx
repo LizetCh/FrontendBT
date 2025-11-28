@@ -14,22 +14,25 @@ export default function RegisterScreen() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const[loading, setLoading] = useState(false);
 
-  const handleRegister = async  () => {
+  const handleRegister = async () => {
+    if (loading) {
+      return;
+    }
     if (!name || !email || !password || !confirmPassword){
       Alert.alert('Error','Todos los campos son obligatorios');
       return;
     }
-    if (password != confirmPassword)
-    {
+    if (password !== confirmPassword) {
       Alert.alert('Error', 'Las contraseñas no coinciden');
+      return;
     }
     try{
       setLoading(true);
 
-      const reponse = await api.post('users/create',{
-        name,email, password
+      const response = await api.post('users/create',{
+        name, email, password
       });
-      const data= reponse.data;
+      const data = response.data;
 
       if (!data.token){
         Alert.alert ('Error', 'No se recibió token del servidor');
@@ -50,7 +53,7 @@ export default function RegisterScreen() {
       console.log('Error en registro', error?.response?.data ||error.message );
 
       const msgBackend =
-        error?.response.data?.error || 'No se pudo crear la cuenta';
+        error?.response?.data?.error || 'No se pudo crear la cuenta';
         Alert.alert('Error', msgBackend);
     }finally{
       setLoading(false);
@@ -106,10 +109,11 @@ export default function RegisterScreen() {
           placeholderTextColor="#9a9a9a"
         />
 
-          <GradientButton
-          title="Crear cuenta"
+        <GradientButton
+          title={loading ? 'Creando cuenta...' : 'Crear cuenta'}
           onPress={handleRegister}
           style={{ marginTop: 10, marginBottom: 16 }}
+          disabled={loading}
         />
       </View>
     </ScrollView>
