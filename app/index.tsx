@@ -1,13 +1,15 @@
 import { colors } from '@/constants/theme';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { GradientButton } from '../components/GradientButton';
+import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { api } from '../api/axiosInstance';
+import { GradientButton, WhiteGradientButton } from '../components/GradientButton';
 
 export default function HomeScreen() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
 const handleLogin = async () => {
   if (!email || !password) {
@@ -20,18 +22,56 @@ const handleLogin = async () => {
     return
   }
 
-  setIsLoading(true)
+  setIsLoading(true);
+
+
 
   try {
-    setTimeout(() => {
-      setIsLoading(false)
-      // Navega después del login exitoso
-      router.push('./services')
-    }, 1500)
-  } catch (error) {
-    Alert.alert('Error', 'Ocurrió un error durante el inicio de sesión')
-    setIsLoading(false)
-  }
+    const response = await api.post('users/login',{
+      email, password,
+    });
+
+    const data = response.data;
+    if(!data.token){
+      Alert.alert('Error','El servidor no regresó un token');
+      setIsLoading(false);
+      return;
+    }
+
+    //Guardar el token para usarlo
+
+    await AsyncStorage.setItem('authToken', data.token);
+
+    Alert.alert ('Bienvenido', 'Inicio de sisón exitoso',[
+      {text:'Continuar',
+        onPress: () =>{
+          router.push('./services');
+        },
+      },
+    ]);
+    } catch (error: any)
+    {
+      console.log ('Error en el login', error?.response?.data || error.message);
+
+      const msgBackend = 
+        error?.response?.data?.error ||
+        error?.response?.data?.message ||
+        'Ocurrio un error durante el incio de sesión';
+
+        Alert.alert('Error',msgBackend);
+    }
+    finally{
+      setIsLoading(false);
+    }
+  };
+
+
+const handleGoToRegister = () => {
+  router.push('./register')
+}
+
+const handleGoToRecoverPassword = () => {
+  router.push('./recoverPassword');
 }
 
   return (
@@ -72,11 +112,27 @@ const handleLogin = async () => {
             autoComplete="password"
             editable={!isLoading}
           />
+          <TouchableOpacity
+            onPress={handleGoToRecoverPassword}
+            disabled={isLoading}
+            style={styles.forgotWrapper}
+          >
+            <Text style={styles.forgotText}>¿Olvidaste tu contraseña?</Text>
+          </TouchableOpacity>
         </View>
 
         <GradientButton 
           title={isLoading ? "Iniciando sesión..." : "Iniciar Sesión"} 
           onPress={handleLogin}
+          style={{ marginBottom: 8 }}
+        />
+
+            <View style={styles.createWrapper}>
+          <Text style={styles.createPrompt}>¿Aún no tienes una cuenta?</Text>
+        </View>
+        <WhiteGradientButton 
+          title={isLoading ? "Creando cuenta..." : "Crear Cuenta"} 
+          onPress={handleGoToRegister}
           style={{ marginBottom: 16 }}
         />
       </View>
@@ -85,6 +141,35 @@ const handleLogin = async () => {
 }
 
 const styles = StyleSheet.create({
+  createWrapper: {
+    marginTop: 1,
+    alignItems: 'center',
+  },
+  forgotWrapper: {
+    alignSelf: 'flex-end',
+    marginTop: 8,
+  },
+  forgotText: {
+    fontSize: 13,
+    color: colors.yellow,
+    fontWeight: '500',
+  },
+  createPrompt: {
+    fontSize: 14,
+    color: colors.dark,
+    marginBottom: 5,
+  },
+  create:{
+    backgroundColor: colors.light,
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+  },
+  createText:{
+  color: colors.dark,
+  fontSize: 16,
+    fontWeight: '600',
+  },
   scrollContent: {
     flexGrow: 1,
     justifyContent: 'center',
