@@ -8,17 +8,8 @@ const ServiceItem = ({service}) => {
   const router = useRouter();  
   return (
     <View style={styles.container}>
-      <View style={styles.headerItem}>
-
-        <View>
-          
-          <View style={styles.userContainer}>
-            {/*default user image*/}
-            <Image source={require('@/assets/images/user-default-img.jpg')}  style={styles.userImage}/>
-          </View>
-          
-          <Text style={styles.userName}>{service.userName}</Text>
-        </View>
+      {/*header contains categories and location*/}
+      <View style={styles.headerItem}> 
         
         {/*render de varias categorías*/}
         <View style={{flexDirection: 'row', gap: 6}}>
@@ -31,11 +22,21 @@ const ServiceItem = ({service}) => {
         <Text style={styles.infoValue}>📍 {service.location}</Text>
         
       </View>
+      
+      {/*title and hours*/}
       <View style={styles.titleContainer}>
         <Text style={styles.title}>{service.title}</Text>
         <Text style={styles.title}> {service.hours} hrs</Text>
-
       </View>
+
+      {/*user info*/}
+        <View style={styles.userInfoContainer}>
+          <View style={styles.userImageContainer}>
+            {/*default user image*/}
+            <Image source={require('@/assets/images/user-default-img.jpg')}  style={styles.userImage}/>
+          </View>
+          <Text style={styles.userName}>{service.owner_name}</Text>
+        </View>
       
       {/*trim description to 15 words*/}
       <Text style={styles.description}>{
@@ -67,24 +68,34 @@ const styles = StyleSheet.create({
     borderColor: '#a6a6a6ff',
     gap: 10
   },
-  headerItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  userContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    overflow: 'hidden',
-    marginBottom: 4,
-  },
+    headerItem: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    userInfoContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 10,
+      marginBottom: 8,
+    },
+    userName: {
+      fontSize: 14,
+      fontWeight: '500',
+      color: '#333'
+    },
+    userImageContainer: {
+      width: 20,
+      height: 20,
+      borderRadius: 20,
+      overflow: 'hidden',
+      marginBottom: 4,
+    },
   userImage: {
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
   },
-  userName: {
   category: {
     fontSize: 12,
     backgroundColor: colors.yellow,
@@ -115,7 +126,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600'
   },
-}
 });
 
 export default ServiceItem

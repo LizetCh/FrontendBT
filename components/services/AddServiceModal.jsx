@@ -2,6 +2,7 @@
 //modal del formulario para agregar un nuevo servicio
 import { useState } from 'react';
 import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { api } from '../../api/axiosInstance';
 import { colors } from '../../constants/theme';
 import { GradientButton } from '../GradientButton';
 
@@ -11,10 +12,11 @@ const AddServiceModal = ({ visible, onClose, onAddService }) => {
   const [categoriesString, setCategoriesString] = useState('');
   const [location, setLocation] = useState('');
   const [hours, setHours] = useState('');
+  const [contact, setContact] = useState('');
 
-  const handleAddService = () => {
+  const handleAddService = async () => {
     //revisar que todos los campos estén llenos
-    if (!title || !description || !categoriesString || !location || !hours) {
+    if (!title || !description || !categoriesString || !location || !hours || !contact) {
       alert('Por favor, completa todos los campos.');
       return;
     }
@@ -26,18 +28,53 @@ const AddServiceModal = ({ visible, onClose, onAddService }) => {
       return;
     }
 
-    //guardar categprías como array (las palabras están separadas por comas)
-    const category = categoriesString.split(',').map(item => item.trim());
 
-    //crear nuevo servicio
-    const newService = { title, description, category, location, hours };
-    onAddService(newService);
-    setTitle('');
-    setDescription('');
-    setCategoriesString('');
-    setLocation('');
-    setHours('');
-    onClose();
+    const newService = {
+      title: title.trim(),
+      description: description.trim(),
+      categories: categoriesString.trim(),
+      location: location.trim(),
+      hours: Number(hoursNumber),
+      contact: contact.trim(),
+    };
+
+    try {
+      //imprimir newService en consola
+      console.log('Nuevo servicio a agregar:', newService);
+
+      //BORRAR JWT DE PRUEBA ‼️‼️
+      const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc2NDM5NjIwOCwianRpIjoiZmQyZWRlNTgtMGY1ZC00YzUwLWI1N2ItZTRjZDlkZDljNjdkIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjY4ZDlhNmU4NzlmMWQ2Mjk1ZmFhZTRmZiIsIm5iZiI6MTc2NDM5NjIwOCwiY3NyZiI6IjFiZTI2Y2RkLWFiZGItNDhlYy1iNmY2LTJjNzE4NDA0OGU1YSIsImV4cCI6MTc2Njk4ODIwOH0.UWUfy-mP6egUaNhchnE9mzTX2hnGeZi21HiTWeHmrXM";
+
+      //hacer POST
+      await api.post(
+        '/services/crear',
+        newService,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`
+          }
+        }
+      )
+
+      alert('Servicio agregado exitosamente');
+
+
+      //limpiar campos y cerrar modal
+      setTitle('');
+      setDescription('');
+      setCategoriesString('');
+      setLocation('');
+      setHours('');
+      setContact('');
+      onClose();
+
+      //refresh list
+      onAddService();
+
+    } catch (error) {
+      console.log('Error al agregar el servicio:', error);
+      alert('Hubo un error al agregar el servicio. Por favor, intenta de nuevo.');
+    }
   };
 
   return (
@@ -89,6 +126,14 @@ const AddServiceModal = ({ visible, onClose, onAddService }) => {
             placeholderTextColor="#999"
             value={hours}
             onChangeText={setHours}
+          />
+          <Text>Contacto</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Ej. 9991312131 / @usuarioRedSocial"
+            placeholderTextColor="#999"
+            value={contact}
+            onChangeText={setContact}
           />
           <View style={styles.buttonContainer}>
             <TouchableOpacity 

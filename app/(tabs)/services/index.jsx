@@ -15,9 +15,8 @@ const ServiceScreen = () => {
 
   const [services, setServices] = useState([])
 
-  //obtener servicios desde el backend
-  useEffect(() => {
-    const fetchServices = async () => {
+  //fetch services
+  const fetchServices = async () => {
       try {
         const res = await api.get("/services");
         setServices(res.data);
@@ -25,11 +24,13 @@ const ServiceScreen = () => {
       } catch (error) {
         console.log("Hubo un error al obtener los servicios:", error.message);
       }
-    };
+  };
 
-    fetchServices();
+  //obtener servicios desde el backend
+  useEffect(() => {
+      fetchServices();
   }, []);
-
+  
 
   //filtrar servicios segun la búsqueda
   const filteredServices = services.filter(service => {
@@ -76,15 +77,19 @@ const ServiceScreen = () => {
         <AddServiceModal
           visible={modalVisible}
           onClose={() => setModalVisible(false)}
-          onAddService={(newService) => {
-            setServices([...services, { id: services.length + 1, ...newService }]);
-          }}
+          onAddService={fetchServices}
         />
 
 
 
+        {/*Mensaje de carga de servicios si hay servicios, desaparece cuando se cargan*/}
+        {services.length === 0 && (
+          <Text style={{textAlign: 'center'}}>Cargando servicios...</Text>
+        )}
 
+        {/*Lista de servicios filtrados*/}
         <ServicesList services={filteredServices}/>
+
 
         <TouchableOpacity style={styles.addButton} onPress={() => showAddServiceModal()}>
           <Text style={styles.buttonText}>+</Text>
