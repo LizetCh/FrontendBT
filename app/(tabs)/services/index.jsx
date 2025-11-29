@@ -83,8 +83,14 @@ const ServiceScreen = () => {
 
 
 
+        {/*Mensaje de carga de servicios si hay servicios, desaparece cuando se cargan*/}
+        {services.length === 0 && (
+          <Text style={{textAlign: 'center'}}>Cargando servicios...</Text>
+        )}
 
+        {/*Lista de servicios filtrados*/}
         <ServicesList services={filteredServices}/>
+
 
         <TouchableOpacity style={styles.addButton} onPress={() => showAddServiceModal()}>
           <Text style={styles.buttonText}>+</Text>
