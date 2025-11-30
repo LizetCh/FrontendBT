@@ -38,7 +38,8 @@ const ServiceScreen = () => {
     return (
       service.title.toLowerCase().includes(query) ||
       service.description.toLowerCase().includes(query) ||
-      service.category.some(item => item.toLowerCase().includes(query)) ||
+      //seacrh in categories array if service has categories
+      (service.categories && service.categories.some(item => item.toLowerCase().includes(query))) ||
       service.location.toLowerCase().includes(query)
     );
   });
