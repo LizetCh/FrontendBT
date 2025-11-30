@@ -1,10 +1,10 @@
 import { colors } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
-import { TextInput, View } from "react-native";
+import { Modal, TextInput, View } from "react-native";
 import { GradientButton, HollowButton } from "../GradientButton";
 
-const AddReviewModal = () => {
+const AddReviewModal = ({ visible, onClose }) => {
   
   const [reviewRating, setReviewRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
@@ -12,8 +12,13 @@ const AddReviewModal = () => {
 
 
   return (
-    <View style={styles.addReviewModal}>
-
+    <Modal 
+      visible={visible}
+      animationType="slide"
+      transparent={true}
+    >
+      <View style={styles.modalContainer}>
+      <View style={styles.modalContent}>
       {/*estrellas*/}
       <View style={styles.starsRow}>
         {[1,2,3,4,5].map((star) => (
@@ -34,6 +39,7 @@ const AddReviewModal = () => {
         value={reviewText}
         onChangeText={setReviewText}
         style={styles.reviewInput}
+        placeholderTextColor={colors.light}
         multiline
       />
 
@@ -44,6 +50,7 @@ const AddReviewModal = () => {
         title="Cancelar"
         style={styles.button}
         onPress={() => {
+          onClose();
           setReviewRating(0);
           setReviewText('');
         }}
@@ -66,25 +73,33 @@ const AddReviewModal = () => {
         }}
        />
 
+      </View>
+
+  </View>
   </View>
   
   
 
-</View>
+</Modal>
   )
 }
 
 export default AddReviewModal;
 
 const styles = {
-  addReviewModal: {
-    backgroundColor: colors.lightest,
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
     padding: 16,
-    borderRadius: 14,
-    marginTop: 16,
-    borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.06)",
-    gap: 12,
+  },
+  modalContent: {
+    width: "100%",
+    backgroundColor: colors.background,
+    borderRadius: 16,
+    padding: 20,
+    gap: 16,
   },
   
   starsRow: {
@@ -95,15 +110,15 @@ const styles = {
   },
   
   reviewInput: {
-    backgroundColor: "white",
+    backgroundColor: colors.lightest,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.12)",
+    borderColor: colors.light,
     padding: 12,
     height: 100,
     textAlignVertical: "top",
     fontSize: 14,
-    color: colors.darkest,
+    color: colors.text,
   },
 
   buttonsContainer: {

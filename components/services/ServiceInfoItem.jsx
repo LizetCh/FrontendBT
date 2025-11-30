@@ -1,14 +1,18 @@
 import { reviewsData } from "@/constants/reviewsData";
 import { colors } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { GradientButton } from "../GradientButton";
 import AddReviewModal from "../reviews/AddReviewModal";
 
 
 const ServiceInfoItem = ({ service }) => {
 
-  //estado para la reseña
+  //estado para el modal de agregar reseña
+  const [isAddReviewModalVisible, setAddReviewModalVisible] = useState(false);
+
+
   
   // si no hay servicio, mostrar mensaje de error
   if (!service) {
@@ -99,12 +103,27 @@ const ServiceInfoItem = ({ service }) => {
 
       <View style={styles.separator} />
 
+      <AddReviewModal 
+        visible={isAddReviewModalVisible}
+        onClose={() => setAddReviewModalVisible(false)}
+      />
+
     
       {/*Sección de reviews*/}
-      <Text style={styles.sectionTitle}>Reseñas</Text>
+      <View style={styles.reviewsHeader}>
+        <Text style={styles.sectionTitle}>Reseñas</Text>
+        {/*Escribir reseña con icono*/}
+        <TouchableOpacity style={styles.writeReviewContainer}
+          onPress={() => {
+            //abrir modal para agregar reseña
+            setAddReviewModalVisible(true);
+          }}
+        >
+          <Ionicons name="create-outline" size={24} color={colors.primary} />
+          <Text style={styles.writeReviewText}>Escribir reseña</Text>
+        </TouchableOpacity>
+      </View>
 
-      {/*Componenete para agrefar reseña*/}
-      <AddReviewModal />
 
       {/*Si no hay reseñas*/}
       {serviceReviews.length === 0 ? (
@@ -183,6 +202,12 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
+  },
+
+  ratingRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
   },
 
   infoContainer: {
@@ -270,16 +295,22 @@ separatorLine: {
 
 
 
-  ratingRow: {
+  reviewsHeader: {
     flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    gap: 4,
+    marginBottom: 12,
   },
 
-  ratingText: {
+  writeReviewContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  
+  writeReviewText: {
     fontSize: 16,
-    fontWeight: "600",
-    color: colors.primary,
+    color: colors.primary
   },
 
   sectionTitle: {
