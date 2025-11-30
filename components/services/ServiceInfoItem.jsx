@@ -1,19 +1,35 @@
-import { reviewsData } from "@/constants/reviewsData";
 import { colors } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { api } from "../../api/axiosInstance";
 import { GradientButton } from "../GradientButton";
 import AddReviewModal from "../reviews/AddReviewModal";
+import ReviewsList from "../reviews/ReviewsList";
 
 
-const ServiceInfoItem = ({ service }) => {
+const ServiceInfoItem =  ({ service }) => {
 
   //estado para el modal de agregar reseña
   const [isAddReviewModalVisible, setAddReviewModalVisible] = useState(false);
-
+  const [reviews, setReviews] = useState([]);
 
   
+  useEffect(() => {
+      const fetchReviews = async () => {
+        try {
+          const res = await api.get(`/reviews/service/${service._id}`);
+          setReviews(res.data);
+          console.log("Reseñas obtenidas:", res.data);
+        } catch (error) {
+          console.log("Hubo un error al obtener las reseñas:", error.message);
+        }
+      };
+
+    fetchReviews();
+
+  }, [service._id]);
+
   // si no hay servicio, mostrar mensaje de error
   if (!service) {
     return (
@@ -36,9 +52,12 @@ const ServiceInfoItem = ({ service }) => {
     id
     } = service;
 
-    const serviceReviews = reviewsData
-    .filter(r => r.serviceId === id)
-    .slice(0, 5);
+    
+
+    
+
+
+    
 
   return (
     <View style={styles.container}>
@@ -104,6 +123,7 @@ const ServiceInfoItem = ({ service }) => {
       <View style={styles.separator} />
 
       <AddReviewModal 
+        serviceId={service._id}
         visible={isAddReviewModalVisible}
         onClose={() => setAddReviewModalVisible(false)}
       />
@@ -126,23 +146,13 @@ const ServiceInfoItem = ({ service }) => {
 
 
       {/*Si no hay reseñas*/}
-      {serviceReviews.length === 0 ? (
+      {reviews.length === 0 ? (
         <View style={styles.noReviewsCard}>
           <Ionicons name="chatbubble-ellipses-outline" size={24} color="#888" />
           <Text style={styles.noReviewsText}>Aún no hay reseñas para este usuario</Text>
         </View>
       ) : (
-        serviceReviews.map(review => (
-            <View key={review.id} style={styles.reviewCard}>
-            <Text style={styles.reviewerName}>{review.reviewer}</Text>
-            <View style={styles.ratingRow}>
-                {Array.from({ length: review.rating }).map((_, i) => (
-                <Ionicons key={i} name="star" size={16} color="#FFD700" />
-                ))}
-            </View>
-            <Text style={styles.reviewComment}>{review.comment}</Text>
-            </View>
-        ))
+        <ReviewsList reviews={reviews} />
       )}
 
 
@@ -290,16 +300,12 @@ separatorLine: {
     fontWeight: "600",
   },
 
-
-  
-
-
-
   reviewsHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 12,
+    paddingHorizontal: 12,
   },
 
   writeReviewContainer: {
@@ -314,7 +320,7 @@ separatorLine: {
   },
 
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "700",
     color: colors.darkest,
   },
@@ -322,28 +328,7 @@ separatorLine: {
 
 
 
-  reviewCard: {
-    backgroundColor: colors.lightest,
-    padding: 12,
-    borderRadius: 12,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.08)",
-    marginTop: 16,
-  },
-
-  reviewerName: {
-    fontSize: 15,
-    fontWeight: "700",
-    color: colors.darkest,
-    marginBottom: 4,
-  },
-
-  reviewComment: {
-    fontSize: 14,
-    color: colors.text,
-    lineHeight: 20,
-  },
+  
 
   noReviewsCard: {
     backgroundColor: colors.lightest,

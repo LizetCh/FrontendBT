@@ -42,8 +42,17 @@ const AddServiceModal = ({ visible, onClose, onAddService }) => {
       //imprimir newService en consola
       console.log('Nuevo servicio a agregar:', newService);
 
+      //obtner jwt
+      /*
+      const jwt = await AsyncStorage.getItem('token');
+      if (!jwt) {
+        alert('No se encontró el token de autenticación. Por favor, inicia sesión de nuevo.');
+        router.push('/login');
+      }
+      */
+
       //BORRAR JWT DE PRUEBA ‼️‼️
-      const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc2NDM5NjIwOCwianRpIjoiZmQyZWRlNTgtMGY1ZC00YzUwLWI1N2ItZTRjZDlkZDljNjdkIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjY4ZDlhNmU4NzlmMWQ2Mjk1ZmFhZTRmZiIsIm5iZiI6MTc2NDM5NjIwOCwiY3NyZiI6IjFiZTI2Y2RkLWFiZGItNDhlYy1iNmY2LTJjNzE4NDA0OGU1YSIsImV4cCI6MTc2Njk4ODIwOH0.UWUfy-mP6egUaNhchnE9mzTX2hnGeZi21HiTWeHmrXM";
+      const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc2NDUyODczMSwianRpIjoiMDA4MDBkNWQtNDFmNC00OGFmLTgxN2ItNTI3ZmI1ZWQ0YzhiIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjY4ZDliOTc4ZGYxOTEyYzg0NTI2OWQ1MiIsIm5iZiI6MTc2NDUyODczMSwiY3NyZiI6IjY5ZGQ5MmQzLTI2ODUtNDA4OC1hZTcyLTM5ODc2NDk5NmVhYyIsImV4cCI6MTc2NzEyMDczMX0.I_z7t8uBdDMqy8lofyRU8KQVLm5zOsTMmcvX7B_PPHk";
 
       //hacer POST
       await api.post(

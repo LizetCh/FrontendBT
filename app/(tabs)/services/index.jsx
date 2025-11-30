@@ -8,12 +8,16 @@ import AddServiceModal from '../../../components/services/AddServiceModal';
 import { colors } from '../../../constants/theme';
 
 
+
 const ServiceScreen = () => {
 
+  
   const [modalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   const [services, setServices] = useState([])
+
+
 
   //fetch services
   const fetchServices = async () => {
