@@ -41,6 +41,8 @@ const handleLogin = async () => {
     //Guardar el token para usarlo
 
     await AsyncStorage.setItem('authToken', data.token);
+    // Guardar el ID del usuario autenticado
+    await AsyncStorage.setItem('authUserId', data.user._id);
 
     Alert.alert ('Bienvenido', 'Inicio de sisón exitoso',[
       {text:'Continuar',

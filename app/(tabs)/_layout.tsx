@@ -34,6 +34,28 @@ export default function TabsLayout() {
             }}
             />
 
+            {/* Tab de Mi perfil */}
+            <Tabs.Screen
+            name="profile"
+            options={{
+                title: "Mi Perfil",
+                tabBarIcon: ({ color }) => (
+                <MaterialIcons name="account-circle" size={24} color={color} />
+                ),
+            }}
+            />
+
+            {/* Tab de Mis transacciones */}
+            <Tabs.Screen
+            name="transactions"
+            options={{
+                title: "Mis transacciones",
+                tabBarIcon: ({ color }) => (
+                <MaterialIcons name="swap-horiz" size={24} color={color} />
+                ),
+            }}
+            />
+
 
       
     </Tabs>
