@@ -25,7 +25,18 @@ const ServiceInfoItem =  ({ service }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [providerProfileVisible, setProviderProfileVisible] = useState(false);
 
+  const [userAvatar, setUserAvatar] = useState(null);
   
+  const fetchUserAvatar = async () => {
+    try {
+      const res = await api.get(`/users/${service.owner_id}`);
+      setUserAvatar(res.data.user.profile_image_url || null);
+    } catch (error) {
+      console.log("Error loading avatar:", error);
+    }
+  };
+
+
   const fetchReviews = async () => {
     try {
       const res = await api.get(`/reviews/service/${service._id}`);
@@ -39,6 +50,10 @@ const ServiceInfoItem =  ({ service }) => {
   useEffect(() => {
     fetchReviews();
   },[service._id]);
+
+  useEffect(() => {
+    fetchUserAvatar();
+  }, [service.owner_id]);
 
    // Obtener usuario actual
   useEffect(() => {
@@ -106,7 +121,8 @@ const ServiceInfoItem =  ({ service }) => {
       <View style={styles.userInfoContainer} >
         <View style={styles.userImageContainer}>
           {/*default user image*/}
-          <Image source={require('@/assets/images/user-default-img.jpg')}  style={styles.userImage}/> 
+          <Image 
+          source={userAvatar ? { uri: userAvatar } : require('@/assets/images/user-default-img.jpg')}  style={styles.userImage}/> 
         </View>
       
       {/*mUESTRA EL PERFIL DEL PROVEEDOR*/}

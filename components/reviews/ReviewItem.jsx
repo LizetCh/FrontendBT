@@ -1,13 +1,16 @@
 
 import { colors } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
+import { api } from "../../api/axiosInstance";
 const ReviewItem = ({ review }) => {
+
   
+  const [userAvatar, setUserAvatar] = useState(null);
+
   //valores default
-  if (!review) {
-    return null;
-  }
+  
   
   const {
     owner_name = "Usuario",
@@ -15,7 +18,22 @@ const ReviewItem = ({ review }) => {
     comment = "",
   } = review;
 
+  const fetchUserAvatar = async () => {
+    try {
+      const res = await api.get(`/users/${review.user_id}`);
+      setUserAvatar(res.data.user.profile_image_url || null);
+    } catch (error) {
+      console.log("Error loading avatar:", error);
+    }
+  };
 
+  useEffect(() => {
+    fetchUserAvatar();
+  }, []);
+
+  if (!review) {
+    return null;
+  }
 
   return (
     <View style={styles.reviewCard}>
@@ -24,7 +42,8 @@ const ReviewItem = ({ review }) => {
         <View style={{flexDirection: "row", alignItems: "center", gap: 8}}>
           <View style={styles.userImageContainer}>
           {/*default user image*/}
-          <Image source={require('@/assets/images/user-default-img.jpg')}  style={styles.userImage}/>
+          <Image 
+          source={userAvatar ? { uri: userAvatar } : require('@/assets/images/user-default-img.jpg')}  style={styles.userImage}/>
         </View>
           <Text style={styles.reviewerName}>{owner_name}</Text>
           

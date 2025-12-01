@@ -5,7 +5,7 @@ const ServicesList = ({services}) => {
   return (
     <View>
       <FlatList 
-        data={services}
+        data={services.reverse()}
         keyExtractor={(item) => item._id.toString()}
         renderItem={({item}) => (
           <ServiceItem service={item} />
