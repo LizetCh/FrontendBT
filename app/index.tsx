@@ -133,7 +133,7 @@ const handleGoToRecoverPassword = () => {
           <Text style={styles.createPrompt}>¿Aún no tienes una cuenta?</Text>
         </View>
         <WhiteGradientButton 
-          title={isLoading ? "Creando cuenta..." : "Crear Cuenta"} 
+          title={"Crear Cuenta"} 
           onPress={handleGoToRegister}
           style={{ marginBottom: 16 }}
         />
