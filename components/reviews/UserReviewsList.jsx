@@ -10,48 +10,38 @@ export default function UserReviewsList({ userId }) {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Obtiene todos los servicios del usuario y las reseñas asociadas
   const fetchUserReviews = async () => {
     try {
-      //console.log("User ID en perfil:", userId);
-
-      // Obtener servicios creados por este usuario
+      // Obtener TODOS los servicios (porque backend NO filtra por user)
       const servicesRes = await api.get(`/services/user/${userId}`);
       const services = servicesRes.data || [];
 
-      // Validar realmente servicios del usuario (blindaje contra backend roto)
-      const ownedServices = services.filter(
-        (svc) => String(svc.owner) === String(userId)
+      // Filtrar solo servicios que realmente son del usuario
+      const myServices = services.filter(
+        (svc) => String(svc.owner_id) === String(userId)
       );
-
-      //console.log("Servicios reales del usuario:", ownedServices.length);
 
       let collected = [];
 
-      // Obtener reseñas por cada servicio real
-      for (const service of ownedServices) {
+      // Obtener reseñas de cada servicio del usuario actual
+      for (const service of myServices) {
         try {
           const reviewsRes = await api.get(`/reviews/service/${service._id}`);
           const rawReviews = reviewsRes.data.reviews || reviewsRes.data;
 
-          const normalized = rawReviews.map((r) => ({
-            _id: r._id,
-            rating: r.rating,
-            comment: r.comment,
-            owner_name: r.owner_name ?? "Usuario",
-            user_id: r.user_id ?? r.reviewer_id ?? null, // soporte flexible
-          }));
+          rawReviews.forEach((r) => {
+            const review = {
+              _id: r._id,
+              rating: r.rating,
+              comment: r.comment,
+              owner_name: r.owner_name ?? "Usuario",
+              reviewer_id: r.user_id ?? null,
+            };
 
-          // Recolectar reseñas:
-          // - que no sean hechas por el mismo usuario
-          // - que no se dupliquen
-          normalized.forEach((rev) => {
-            const isOwnReview = String(rev.user_id) === String(userId);
-            const exists = collected.some((c) => c._id === rev._id);
+            const isOwnReview = String(review.reviewer_id) === String(userId);
+            const exists = collected.some((c) => c._id === review._id);
 
-            if (!isOwnReview && !exists) {
-              collected.push(rev);
-            }
+            if (!isOwnReview && !exists) collected.push(review);
           });
         } catch (err) {
           console.log("Error obteniendo reseñas:", err.message);
@@ -66,22 +56,15 @@ export default function UserReviewsList({ userId }) {
     }
   };
 
-  // Ejecuta consulta cuando cambia el usuario
   useEffect(() => {
     if (userId) fetchUserReviews();
   }, [userId]);
 
-  // Estado de carga
-  if (loading) {
-    return <Text style={styles.text}>Cargando reseñas...</Text>;
-  }
+  if (loading) return <Text style={styles.text}>Cargando reseñas...</Text>;
 
-  // Si no hay reseñas
-  if (reviews.length === 0) {
+  if (reviews.length === 0)
     return <Text style={styles.text}>Sin reseñas aún</Text>;
-  }
 
-  // Render
   return (
     <View style={{ marginTop: 10 }}>
       {reviews.map((review) => (
