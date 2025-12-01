@@ -1,15 +1,17 @@
 import { colors } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 import { useState } from "react";
 import { Modal, TextInput, View } from "react-native";
 import { api } from "../../api/axiosInstance";
 import { GradientButton, HollowButton } from "../GradientButton";
 
-
 const AddReviewModal = ({ serviceId, visible, onClose }) => {
   
   const [reviewRating, setReviewRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
+  
 
   const handleSubmitReview = async () => {
     //revisar que todos los campos estén llenos antes de enviar
@@ -30,17 +32,14 @@ const AddReviewModal = ({ serviceId, visible, onClose }) => {
 
     try {
 
-      /*
-      //obtner jwt
-      const jwt = await AsyncStorage.getItem('token');
-      if (!jwt) {
-        alert('No se encontró el token de autenticación. Por favor, inicia sesión de nuevo.');
-        router.push('/login');
-      }
-      */
 
-      //BORRAR JWT DE PRUEBA ‼️‼️
-      const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc2NDUyODczMSwianRpIjoiMDA4MDBkNWQtNDFmNC00OGFmLTgxN2ItNTI3ZmI1ZWQ0YzhiIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjY4ZDliOTc4ZGYxOTEyYzg0NTI2OWQ1MiIsIm5iZiI6MTc2NDUyODczMSwiY3NyZiI6IjY5ZGQ5MmQzLTI2ODUtNDA4OC1hZTcyLTM5ODc2NDk5NmVhYyIsImV4cCI6MTc2NzEyMDczMX0.I_z7t8uBdDMqy8lofyRU8KQVLm5zOsTMmcvX7B_PPHk";
+      const token = await AsyncStorage.getItem("authToken");
+      if (!token) {
+        alert('No se encontró el token de autenticación. Por favor, inicia sesión de nuevo.');
+        //mandar a login
+        router.push('/login');
+        return;
+      }
 
       //hacer POST
       await api.post(
@@ -48,7 +47,7 @@ const AddReviewModal = ({ serviceId, visible, onClose }) => {
         newReview,
         {
           headers: { 
-            Authorization: `Bearer ${jwt}`
+            Authorization: `Bearer ${token}`
           }
         }
       );
