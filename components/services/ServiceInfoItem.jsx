@@ -1,11 +1,17 @@
 import { colors } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { api } from "../../api/axiosInstance";
 import { GradientButton } from "../GradientButton";
+import UserProfileModal from "../profile/UserProfileModal";
 import AddReviewModal from "../reviews/AddReviewModal";
 import ReviewsList from "../reviews/ReviewsList";
+import CreateTransactionModal from "../transactions/CreateTransactionModal";
+
+
+
 
 
 const ServiceInfoItem =  ({ service }) => {
@@ -13,6 +19,11 @@ const ServiceInfoItem =  ({ service }) => {
   //estado para el modal de agregar reseña
   const [isAddReviewModalVisible, setAddReviewModalVisible] = useState(false);
   const [reviews, setReviews] = useState([]);
+
+   // AGREGADO PARA TRANSACCIÓN
+  const [transactionVisible, setTransactionVisible] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [providerProfileVisible, setProviderProfileVisible] = useState(false);
 
   
   useEffect(() => {
@@ -29,6 +40,23 @@ const ServiceInfoItem =  ({ service }) => {
     fetchReviews();
 
   }, [service._id]);
+
+   // Obtener usuario actual
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const token = await AsyncStorage.getItem("authToken");
+        const res = await api.get("/users/profile", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setCurrentUser(res.data.user);
+      } catch (error) {
+        console.log("Error cargando usuario:", error.message);
+      }
+    };
+    loadUser();
+  }, []);
+
 
   // si no hay servicio, mostrar mensaje de error
   if (!service) {
@@ -49,7 +77,8 @@ const ServiceInfoItem =  ({ service }) => {
     contact = "No disponible",
     owner_name = "Usuario",
     providerRating = 0,
-    id
+    id,
+    owner
     } = service;
 
     
@@ -80,7 +109,15 @@ const ServiceInfoItem =  ({ service }) => {
           {/*default user image*/}
           <Image source={require('@/assets/images/user-default-img.jpg')}  style={styles.userImage}/> 
         </View>
-      <Text>{owner_name}</Text>
+      
+      {/*mUESTRA EL PERFIL DEL PROVEEDOR*/}
+      <TouchableOpacity onPress={() => setProviderProfileVisible(true)}>
+        <Text style={{ fontWeight: "600", color: colors.primary }}>
+          {owner_name}
+        </Text>
+      </TouchableOpacity>
+
+
       <View style={styles.ratingRow}>
           <Ionicons name="star" size={20} color="#FFD700" />
           <Text style={styles.ratingText}>{providerRating}</Text>
@@ -115,8 +152,8 @@ const ServiceInfoItem =  ({ service }) => {
         {description}
       </Text>
 
-      <GradientButton 
-        onPress={() => {}}
+      <GradientButton
+        onPress={() => setTransactionVisible(true)}
         title='Crear transacción'
       />
 
@@ -155,6 +192,25 @@ const ServiceInfoItem =  ({ service }) => {
         <ReviewsList reviews={reviews} />
       )}
 
+
+
+
+      <CreateTransactionModal
+        visible={transactionVisible}
+        onClose={() => setTransactionVisible(false)}
+        serviceId={service._id}
+        serviceName={service.title}
+        serviceLocation={service.location}
+        providerName={service.owner_name}
+        clientName={currentUser?.name}
+        clientId={currentUser?._id}
+      />
+
+      <UserProfileModal
+        visible={providerProfileVisible}
+        onClose={() => setProviderProfileVisible(false)}
+        userId={service.owner_id} 
+      />
 
     </View>
   );

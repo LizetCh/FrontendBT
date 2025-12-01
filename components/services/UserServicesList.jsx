@@ -11,9 +11,10 @@ export default function UserServicesList({ userId }) {
 
   const fetchUserServices = async () => {
     try {
-
+     
       const res = await api.get(`/services`);
-
+      
+      
       const filtered = res.data.filter(service => service.owner_id === userId);
 
       console.log("Servicios filtrados del usuario:", filtered);

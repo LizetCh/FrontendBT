@@ -1,8 +1,9 @@
+//Usada unicamente en Mi Perfil
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { api } from "../../api/axiosInstance";
 import { colors } from "../../constants/theme";
-import ReviewCard from "./ReviewCard";
+import ReviewCard from "./ReviewItem";
 
 export default function UserReviewsList({ userId }) {
   const [reviews, setReviews] = useState([]);
@@ -10,35 +11,36 @@ export default function UserReviewsList({ userId }) {
 
   const fetchUserReviews = async () => {
     try {
-      // Obtiene solo servicios del usuario dueño del perfil
       const servicesRes = await api.get(`/services/user/${userId}`);
-      const userServices = servicesRes.data;
+      const services = servicesRes.data;
 
-      console.log("Servicios del usuario:", userServices);
+      let collected = [];
 
-      let userReceivedReviews = [];
-
-      // Obtener reseñas de cada servicio
-      for (const service of userServices) {
+      for (const service of services) {
         try {
           const reviewsRes = await api.get(`/reviews/service/${service._id}`);
-          const serviceReviews = reviewsRes.data.reviews || reviewsRes.data;
+          const rawReviews = reviewsRes.data.reviews || reviewsRes.data;
 
-          // Filtrar solo reseñas dirigidas a este usuario dueÑo del servicio
-          const filtered = serviceReviews.filter(
-            r => r.user_id !== userId // evita reseñas que este usuario haya hecho él mismo
-          );
+          
+          const normalizedReviews = rawReviews.map(r => ({
+            _id: r._id,
+            owner_name: r.owner_name ?? "Usuario",
+            rating: r.rating,
+            comment: r.comment,
+          }));
 
-          userReceivedReviews = [...userReceivedReviews, ...filtered];
+          // Evita mostrar reseñas hechas por él mismo
+          collected = [
+            ...collected, 
+            ...normalizedReviews.filter(r => r.user_id !== userId)
+          ];
 
         } catch (error) {
           console.log("Error obteniendo reseñas de servicio:", error.message);
         }
       }
 
-      console.log("Reseñas finales:", userReceivedReviews);
-
-      setReviews(userReceivedReviews);
+      setReviews(collected);
     } catch (error) {
       console.log("Error al obtener reseñas:", error.message);
     } finally {
@@ -46,15 +48,13 @@ export default function UserReviewsList({ userId }) {
     }
   };
 
-  useEffect(() => {
-    fetchUserReviews();
-  }, [userId]);
+  useEffect(() => { fetchUserReviews(); }, [userId]);
 
   if (loading) {
     return <Text style={styles.text}>Cargando reseñas...</Text>;
   }
 
-  if (!loading && reviews.length === 0) {
+  if (reviews.length === 0) {
     return <Text style={styles.text}>Sin reseñas aún</Text>;
   }
 
