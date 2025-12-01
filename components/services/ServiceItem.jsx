@@ -1,11 +1,30 @@
 import { colors } from '@/constants/theme';
 import { useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
+import { api } from '../../api/axiosInstance';
 import { GradientButton } from '../GradientButton';
+
 
 
 const ServiceItem = ({service}) => {
   const router = useRouter();  
+  
+  const [userAvatar, setUserAvatar] = useState(null);
+  
+  const fetchUserAvatar = async () => {
+    try {
+      const res = await api.get(`/users/${service.owner_id}`);
+      setUserAvatar(res.data.user.profile_image_url || null);
+    } catch (error) {
+      console.log("Error loading avatar:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserAvatar();
+  }, []);
+
   return (
     <View style={styles.container}>
       {/*header contains categories and location*/}
@@ -33,7 +52,12 @@ const ServiceItem = ({service}) => {
         <View style={styles.userInfoContainer}>
           <View style={styles.userImageContainer}>
             {/*default user image*/}
-            <Image source={require('@/assets/images/user-default-img.jpg')}  style={styles.userImage}/>
+            <Image 
+              source={
+              userAvatar
+                ? { uri: userAvatar }
+                : require('@/assets/images/user-default-img.jpg')
+            }  style={styles.userImage}/>
           </View>
           <Text style={styles.userName}>{service.owner_name}</Text>
         </View>

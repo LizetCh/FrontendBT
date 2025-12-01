@@ -1,9 +1,11 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 export default function TabsLayout() {
   return (
+    <SafeAreaView style={{ flex: 1 , backgroundColor: '#FFFFFF'}} edges={['bottom', 'left', 'right']}>
     <Tabs
       screenOptions={{
         headerShown: false,
@@ -59,6 +61,7 @@ export default function TabsLayout() {
 
       
     </Tabs>
+    </SafeAreaView>
   );
 }
 
