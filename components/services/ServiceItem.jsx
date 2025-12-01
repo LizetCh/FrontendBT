@@ -76,8 +76,8 @@ const styles = StyleSheet.create({
     userInfoContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 10,
-      marginBottom: 8,
+      gap: 12,
+      marginBottom: 0
     },
     userName: {
       fontSize: 14,
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
       height: 20,
       borderRadius: 20,
       overflow: 'hidden',
-      marginBottom: 4,
+      marginBottom: 0,
     },
   userImage: {
     width: '100%',

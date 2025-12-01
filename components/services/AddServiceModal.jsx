@@ -105,10 +105,13 @@ const AddServiceModal = ({ visible, onClose, onAddService }) => {
           />
           <Text>Descripción</Text>
           <TextInput
-            style={styles.input}
-            placeholder="Ej. Clases de yoga para principiantes"
+            style={[styles.input, { height: 80}]}
+            placeholder="Describe tu servicio. 
+Ej. Clases de yoga para principiantes..."
+
             placeholderTextColor="#999"
             value={description}
+            multiline={true}
             onChangeText={setDescription}
           />
           <Text>Categoría (Separar por comas)</Text>
