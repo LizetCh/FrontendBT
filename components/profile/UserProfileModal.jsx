@@ -1,14 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import {
-  Image,
-  Modal,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { api } from "../../api/axiosInstance";
 import { colors } from "../../constants/theme";
@@ -21,7 +13,6 @@ export default function UserProfileModal({ visible, onClose, userId }) {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // FETCH = Solicitud HTTP al backend para obtener datos del usuario
   const fetchProfile = async () => {
     try {
       const res = await api.get(`/users/${userId}`);
@@ -41,14 +32,15 @@ export default function UserProfileModal({ visible, onClose, userId }) {
   }, [visible, userId]);
 
   return (
-    <Modal visible={visible} animationType="slide">
+    <Modal visible={visible} animationType="slide" statusBarTranslucent>
+
+      {/* X fija */}
+      <TouchableOpacity onPress={onClose} style={styles.modalCloseButton}>
+        <Ionicons name="close-outline" size={34} color={colors.primary} />
+      </TouchableOpacity>
+
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.modalContainer}>
-
-          {/* ❌ Botón de cierre fijo con área táctil amplia */}
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Ionicons name="close-outline" size={34} color={colors.primary} />
-          </TouchableOpacity>
 
           {loading && (
             <Text style={styles.loadingText}>Cargando perfil...</Text>
@@ -60,7 +52,7 @@ export default function UserProfileModal({ visible, onClose, userId }) {
               contentContainerStyle={styles.scrollContent}
             >
 
-              {/* FOTO DE PERFIL */}
+              {/* Foto ed perfil*/}
               <View style={styles.avatarWrapper}>
                 <Image
                   source={{
@@ -72,10 +64,10 @@ export default function UserProfileModal({ visible, onClose, userId }) {
                 />
               </View>
 
-              {/* NOMBRE */}
+              {/* Nnombre */}
               <Text style={styles.userName}>{profile.name}</Text>
 
-              {/* ESTRELLAS Y PROMEDIO */}
+              {/* Estrellas y promedio */}
               <View style={{ marginTop: 6 }}>
                 <UserRating
                   avg={profile.rating_avg}
@@ -83,10 +75,10 @@ export default function UserProfileModal({ visible, onClose, userId }) {
                 />
               </View>
 
-              {/* BIO + SKILLS */}
+              {/*Bio y skills */}
               <UserInfo bio={profile.bio} skills={profile.skills} />
 
-              {/* TABS */}
+              {/* Tabs */}
               <View style={{ marginTop: 10 }}>
                 <ProfileTabs userId={profile._id} />
               </View>
@@ -111,13 +103,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
 
-  /** 🔥 X fija arriba, siempre clickeable */
-  closeButton: {
+  modalCloseButton: {
     position: "absolute",
-    top: 12,
+    top: 30,
     right: 12,
-    padding: 12,      // gran área táctil
-    zIndex: 9999,     // siempre al frente
+    padding: 12,
+    zIndex: 99999,
+    elevation: 99999,
   },
 
   loadingText: {
@@ -127,7 +119,6 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
 
-  /** Espacio extra para que la X no se empalme */
   scrollContent: {
     paddingTop: 60,
     paddingBottom: 50,
