@@ -4,7 +4,7 @@ import ReviewItem from "./ReviewItem";
 const ReviewsList = ({ reviews }) => {
   return (
     <FlatList
-      data={reviews}
+      data={reviews.reverse()}
       keyExtractor={(item) => item._id}
       renderItem={({ item }) => <ReviewItem review={item} />}
     />
