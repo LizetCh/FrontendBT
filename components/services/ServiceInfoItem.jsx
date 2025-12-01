@@ -26,20 +26,19 @@ const ServiceInfoItem =  ({ service }) => {
   const [providerProfileVisible, setProviderProfileVisible] = useState(false);
 
   
+  const fetchReviews = async () => {
+    try {
+      const res = await api.get(`/reviews/service/${service._id}`);
+      setReviews(res.data);
+      console.log("Reseñas obtenidas:", res.data);
+    } catch (error) {
+      console.log("Hubo un error al obtener las reseñas:", error.message);
+    }
+  };
+
   useEffect(() => {
-      const fetchReviews = async () => {
-        try {
-          const res = await api.get(`/reviews/service/${service._id}`);
-          setReviews(res.data);
-          console.log("Reseñas obtenidas:", res.data);
-        } catch (error) {
-          console.log("Hubo un error al obtener las reseñas:", error.message);
-        }
-      };
-
     fetchReviews();
-
-  }, [service._id]);
+  });
 
    // Obtener usuario actual
   useEffect(() => {
@@ -162,7 +161,11 @@ const ServiceInfoItem =  ({ service }) => {
       <AddReviewModal 
         serviceId={service._id}
         visible={isAddReviewModalVisible}
-        onClose={() => setAddReviewModalVisible(false)}
+        //refrescar reseñas al cerrar, usando fetchReviews
+        onClose={() => {
+          setAddReviewModalVisible(false);
+          fetchReviews();
+        }}
       />
 
     
@@ -174,6 +177,7 @@ const ServiceInfoItem =  ({ service }) => {
           onPress={() => {
             //abrir modal para agregar reseña
             setAddReviewModalVisible(true);
+            
           }}
         >
           <Ionicons name="create-outline" size={24} color={colors.primary} />
@@ -282,6 +286,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     alignItems: "center",
     justifyContent: "space-around",
+    
   },
 
 infoCard: {
@@ -292,6 +297,8 @@ infoCard: {
   gap: 11,
   flexDirection: "row",
   marginBottom: 10,
+  //avoid overflow
+    flexWrap: "wrap",
 },
 
 infoRow: {
