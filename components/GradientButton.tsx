@@ -46,6 +46,7 @@ export const GradientButton = ({
     </LinearGradient>
   </TouchableOpacity>
 );
+
 export const WhiteGradientButton = ({
   onPress,
   title,
@@ -62,6 +63,22 @@ export const WhiteGradientButton = ({
     >
       <Text style={[styles.whiteText, textStyle]}>{title}</Text>
     </LinearGradient>
+  </TouchableOpacity>
+);
+
+export const HollowButton = ({
+  onPress,
+  title,
+  style,
+  textStyle,
+  disabled = false,
+}: SolidButtonProps) => (
+  <TouchableOpacity
+    onPress={onPress}
+    style={[styles.hollowButton, style, disabled && styles.disabled]}
+    disabled={disabled}
+  >
+    <Text style={[styles.hollowText, textStyle]}>{title}</Text>
   </TouchableOpacity>
 );
 
@@ -82,6 +99,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#E0E0E0', // borde sutil para destacar sobre fondo blanco
+  },
+  hollowButton: {
+    borderRadius: 12,
+    padding: 12,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.primary, 
+    backgroundColor: 'transparent',
+  },
+  hollowText: {
+    color: colors.primary,
+    fontSize: 16,
+    fontWeight: '600',
   },
   whiteText: {
     color: '#7A00C6', // morado elegante
