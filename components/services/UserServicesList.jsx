@@ -38,7 +38,7 @@ export default function UserServicesList({ userId }) {
   if (!loading && services.length === 0) {
     return (
       <Text style={styles.text}>
-        Este usuario no tiene servicios publicados.
+        No tienes servicios publicados.
       </Text>
     );
   }
