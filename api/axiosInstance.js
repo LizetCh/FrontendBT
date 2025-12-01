@@ -1,5 +1,6 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "http://192.168.100.36:8080/api" //Solo para pruebas
+  baseURL: "https://backendbt-0qxn.onrender.com/api" //url de render 
+  //baseURL: "localhost:8080/api" //url local
 });

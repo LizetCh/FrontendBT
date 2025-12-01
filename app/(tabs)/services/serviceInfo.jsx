@@ -1,13 +1,14 @@
 import ServiceInfoItem from "@/components/services/ServiceInfoItem";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from '../../../constants/theme';
 
 const ServiceInfo = () => {
   const { service } = useLocalSearchParams();
   const parsedService = JSON.parse(service);
+
   
 
   return (
@@ -22,9 +23,9 @@ const ServiceInfo = () => {
         </View>
         <View style={styles.separator} />
 
-        <ScrollView>
-          <ServiceInfoItem service={parsedService} />
-        </ScrollView>
+        
+        <ServiceInfoItem service={parsedService} />
+        
       </View>
     </SafeAreaView>
   );

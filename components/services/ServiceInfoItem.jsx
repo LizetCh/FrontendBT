@@ -1,19 +1,63 @@
-import { reviewsData } from "@/constants/reviewsData";
 import { colors } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { api } from "../../api/axiosInstance";
 import { GradientButton } from "../GradientButton";
+import UserProfileModal from "../profile/UserProfileModal";
 import AddReviewModal from "../reviews/AddReviewModal";
+import ReviewsList from "../reviews/ReviewsList";
+import CreateTransactionModal from "../transactions/CreateTransactionModal";
 
 
-const ServiceInfoItem = ({ service }) => {
+
+
+
+const ServiceInfoItem =  ({ service }) => {
 
   //estado para el modal de agregar reseña
   const [isAddReviewModalVisible, setAddReviewModalVisible] = useState(false);
+  const [reviews, setReviews] = useState([]);
 
+   // AGREGADO PARA TRANSACCIÓN
+  const [transactionVisible, setTransactionVisible] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [providerProfileVisible, setProviderProfileVisible] = useState(false);
 
   
+  useEffect(() => {
+      const fetchReviews = async () => {
+        try {
+          const res = await api.get(`/reviews/service/${service._id}`);
+          setReviews(res.data);
+          console.log("Reseñas obtenidas:", res.data);
+        } catch (error) {
+          console.log("Hubo un error al obtener las reseñas:", error.message);
+        }
+      };
+
+    fetchReviews();
+
+  }, [service._id]);
+
+   // Obtener usuario actual
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const token = await AsyncStorage.getItem("authToken");
+        const res = await api.get("/users/profile", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setCurrentUser(res.data.user);
+      } catch (error) {
+        console.log("Error cargando usuario:", error.message);
+      }
+    };
+    loadUser();
+  }, []);
+
+
   // si no hay servicio, mostrar mensaje de error
   if (!service) {
     return (
@@ -33,12 +77,16 @@ const ServiceInfoItem = ({ service }) => {
     contact = "No disponible",
     owner_name = "Usuario",
     providerRating = 0,
-    id
+    id,
+    owner
     } = service;
 
-    const serviceReviews = reviewsData
-    .filter(r => r.serviceId === id)
-    .slice(0, 5);
+    
+
+    
+
+
+    
 
   return (
     <View style={styles.container}>
@@ -61,7 +109,15 @@ const ServiceInfoItem = ({ service }) => {
           {/*default user image*/}
           <Image source={require('@/assets/images/user-default-img.jpg')}  style={styles.userImage}/> 
         </View>
-      <Text>{owner_name}</Text>
+      
+      {/*mUESTRA EL PERFIL DEL PROVEEDOR*/}
+      <TouchableOpacity onPress={() => setProviderProfileVisible(true)}>
+        <Text style={{ fontWeight: "600", color: colors.primary }}>
+          {owner_name}
+        </Text>
+      </TouchableOpacity>
+
+
       <View style={styles.ratingRow}>
           <Ionicons name="star" size={20} color="#FFD700" />
           <Text style={styles.ratingText}>{providerRating}</Text>
@@ -96,14 +152,15 @@ const ServiceInfoItem = ({ service }) => {
         {description}
       </Text>
 
-      <GradientButton 
-        onPress={() => {}}
+      <GradientButton
+        onPress={() => setTransactionVisible(true)}
         title='Crear transacción'
       />
 
       <View style={styles.separator} />
 
       <AddReviewModal 
+        serviceId={service._id}
         visible={isAddReviewModalVisible}
         onClose={() => setAddReviewModalVisible(false)}
       />
@@ -126,25 +183,34 @@ const ServiceInfoItem = ({ service }) => {
 
 
       {/*Si no hay reseñas*/}
-      {serviceReviews.length === 0 ? (
+      {reviews.length === 0 ? (
         <View style={styles.noReviewsCard}>
           <Ionicons name="chatbubble-ellipses-outline" size={24} color="#888" />
           <Text style={styles.noReviewsText}>Aún no hay reseñas para este usuario</Text>
         </View>
       ) : (
-        serviceReviews.map(review => (
-            <View key={review.id} style={styles.reviewCard}>
-            <Text style={styles.reviewerName}>{review.reviewer}</Text>
-            <View style={styles.ratingRow}>
-                {Array.from({ length: review.rating }).map((_, i) => (
-                <Ionicons key={i} name="star" size={16} color="#FFD700" />
-                ))}
-            </View>
-            <Text style={styles.reviewComment}>{review.comment}</Text>
-            </View>
-        ))
+        <ReviewsList reviews={reviews} />
       )}
 
+
+
+
+      <CreateTransactionModal
+        visible={transactionVisible}
+        onClose={() => setTransactionVisible(false)}
+        serviceId={service._id}
+        serviceName={service.title}
+        serviceLocation={service.location}
+        providerName={service.owner_name}
+        clientName={currentUser?.name}
+        clientId={currentUser?._id}
+      />
+
+      <UserProfileModal
+        visible={providerProfileVisible}
+        onClose={() => setProviderProfileVisible(false)}
+        userId={service.owner_id} 
+      />
 
     </View>
   );
@@ -290,16 +356,12 @@ separatorLine: {
     fontWeight: "600",
   },
 
-
-  
-
-
-
   reviewsHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 12,
+    paddingHorizontal: 12,
   },
 
   writeReviewContainer: {
@@ -314,7 +376,7 @@ separatorLine: {
   },
 
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "700",
     color: colors.darkest,
   },
@@ -322,28 +384,7 @@ separatorLine: {
 
 
 
-  reviewCard: {
-    backgroundColor: colors.lightest,
-    padding: 12,
-    borderRadius: 12,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.08)",
-    marginTop: 16,
-  },
-
-  reviewerName: {
-    fontSize: 15,
-    fontWeight: "700",
-    color: colors.darkest,
-    marginBottom: 4,
-  },
-
-  reviewComment: {
-    fontSize: 14,
-    color: colors.text,
-    lineHeight: 20,
-  },
+  
 
   noReviewsCard: {
     backgroundColor: colors.lightest,
