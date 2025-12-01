@@ -5,20 +5,14 @@ import { api } from "../../api/axiosInstance";
 import { colors } from '../../constants/theme';
 import ServiceItem from "../services/ServiceItem";
 
-export default function UserServicesList({ userId }) {
+export default function UserServicesList({ userId, onServicePress }) {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchUserServices = async () => {
     try {
-     
       const res = await api.get(`/services`);
-      
-      
       const filtered = res.data.filter(service => service.owner_id === userId);
-
-      console.log("Servicios filtrados del usuario:", filtered);
-
       setServices(filtered);
     } catch (error) {
       console.log("Error al obtener servicios del usuario:", error.message);
@@ -29,7 +23,7 @@ export default function UserServicesList({ userId }) {
 
   useEffect(() => {
     fetchUserServices();
-  }, [userId]); 
+  }, [userId]);
 
   if (loading) {
     return <Text style={styles.text}>Cargando servicios...</Text>;
@@ -46,7 +40,11 @@ export default function UserServicesList({ userId }) {
   return (
     <View style={{ marginTop: 10 }}>
       {services.map(service => (
-        <ServiceItem key={service._id} service={service} />
+        <ServiceItem
+          key={service._id}
+          service={service}
+          onPress={onServicePress}  // ⬅️ ESTA ES LA CORRECCIÓN
+        />
       ))}
     </View>
   );

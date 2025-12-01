@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { api } from "../../api/axiosInstance";
 import { colors } from "../../constants/theme";
 
+import ServiceInfoItem from "../services/ServiceInfoItem"; // ⬅️ agregado
 import ProfileTabs from "./ProfileTabs";
 import UserInfo from "./UserInfo";
 import UserRating from "./UserRating";
@@ -12,6 +13,10 @@ import UserRating from "./UserRating";
 export default function UserProfileModal({ visible, onClose, userId }) {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  /** ⬇️ NUEVO: estados para navegación */
+  const [view, setView] = useState("profile"); // profile | service
+  const [selectedService, setSelectedService] = useState(null);
 
   const fetchProfile = async () => {
     try {
@@ -26,10 +31,18 @@ export default function UserProfileModal({ visible, onClose, userId }) {
 
   useEffect(() => {
     if (visible && userId) {
+      setView("profile");          // ⬅️ reiniciar vista al abrir modal
+      setSelectedService(null);    // ⬅️ limpiar servicio
       setLoading(true);
       fetchProfile();
     }
   }, [visible, userId]);
+
+  /** ⬇️ función llamada desde ProfileTabs → UserServicesList → ServiceItem */
+  const handleServicePress = (service) => {
+    setSelectedService(service);
+    setView("service");
+  };
 
   return (
     <Modal visible={visible} animationType="slide" statusBarTranslucent>
@@ -46,13 +59,11 @@ export default function UserProfileModal({ visible, onClose, userId }) {
             <Text style={styles.loadingText}>Cargando perfil...</Text>
           )}
 
-          {!loading && profile && (
+          {!loading && profile && view === "profile" && (   // ⬅️ render condicional
             <ScrollView
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.scrollContent}
             >
-
-              {/* Foto ed perfil*/}
               <View style={styles.avatarWrapper}>
                 <Image
                   source={{
@@ -64,10 +75,8 @@ export default function UserProfileModal({ visible, onClose, userId }) {
                 />
               </View>
 
-              {/* Nnombre */}
               <Text style={styles.userName}>{profile.name}</Text>
 
-              {/* Estrellas y promedio */}
               <View style={{ marginTop: 6 }}>
                 <UserRating
                   avg={profile.rating_avg}
@@ -75,16 +84,34 @@ export default function UserProfileModal({ visible, onClose, userId }) {
                 />
               </View>
 
-              {/*Bio y skills */}
               <UserInfo bio={profile.bio} skills={profile.skills} />
 
-              {/* Tabs */}
               <View style={{ marginTop: 10 }}>
-                <ProfileTabs userId={profile._id} />
+                <ProfileTabs
+                  userId={profile._id}
+                  onServicePress={handleServicePress}   // ⬅️ ahora sí se pasa
+                />
               </View>
-
             </ScrollView>
           )}
+
+          {/* 🔥 NUEVO: DETALLE DE SERVICIO DENTRO DEL MISMO MODAL */}
+          {!loading && view === "service" && selectedService && (
+            <View style={{ flex: 1, paddingTop: 60 }}>
+              {/* botón volver */}
+              <TouchableOpacity
+                style={{ marginBottom: 10 }}
+                onPress={() => setView("profile")}
+              >
+                <Text style={{ color: colors.primary, fontSize: 16, fontWeight: "600" }}>
+                  ← Volver al perfil
+                </Text>
+              </TouchableOpacity>
+
+              <ServiceInfoItem service={selectedService} />
+            </View>
+          )}
+
         </View>
       </SafeAreaView>
     </Modal>

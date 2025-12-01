@@ -5,9 +5,7 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 import { api } from '../../api/axiosInstance';
 import { GradientButton } from '../GradientButton';
 
-
-
-const ServiceItem = ({service}) => {
+const ServiceItem = ({ service, onPress }) => {   // ⬅️ agregado onPress
   const router = useRouter();  
   
   const [userAvatar, setUserAvatar] = useState(null);
@@ -32,7 +30,6 @@ const ServiceItem = ({service}) => {
         
         {/*render de varias categorías*/}
         <View style={{flexDirection: 'row', gap: 6}}>
-          {/*get categories if not undefined*/}
           {service.categories && service.categories.map((item, index) => (
             <Text key={index} style={styles.category}>{item}</Text>
           ))}
@@ -49,30 +46,40 @@ const ServiceItem = ({service}) => {
       </View>
 
       {/*user info*/}
-        <View style={styles.userInfoContainer}>
-          <View style={styles.userImageContainer}>
-            {/*default user image*/}
-            <Image 
-              source={
+      <View style={styles.userInfoContainer}>
+        <View style={styles.userImageContainer}>
+          <Image 
+            source={
               userAvatar
                 ? { uri: userAvatar }
                 : require('@/assets/images/user-default-img.jpg')
-            }  style={styles.userImage}/>
-          </View>
-          <Text style={styles.userName}>{service.owner_name}</Text>
+            }
+            style={styles.userImage}
+          />
         </View>
+        <Text style={styles.userName}>{service.owner_name}</Text>
+      </View>
       
       {/*trim description to 15 words*/}
-      <Text style={styles.description}>{
-        service.description.split(" ").length > 15 ? service.description.split(" ").slice(0, 15).join(" ") + " ..." : service.description}
+      <Text style={styles.description}>
+        {service.description.split(" ").length > 15 
+          ? service.description.split(" ").slice(0, 15).join(" ") + " ..."
+          : service.description}
       </Text>
-      <GradientButton onPress={() => router.push({
-        pathname: "/services/serviceInfo",
-        params: { service: JSON.stringify(service) }
-      })}
+
+      {/* 🔥 Botón multipropósito */}
+      <GradientButton
+        onPress={() => {
+          if (onPress) return onPress(service);      // ⬅️ navegación desde modal
+          
+          // comportamiento original
+          router.push({
+            pathname: "/services/serviceInfo",
+            params: { service: JSON.stringify(service) }
+          });
+        }}
         title="Ver más"
         textStyle={styles.buttonText}
-
       />
     </View>
   )
@@ -92,29 +99,29 @@ const styles = StyleSheet.create({
     borderColor: '#a6a6a6ff',
     gap: 10
   },
-    headerItem: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    userInfoContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 12,
-      marginBottom: 0
-    },
-    userName: {
-      fontSize: 14,
-      fontWeight: '500',
-      color: '#333'
-    },
-    userImageContainer: {
-      width: 20,
-      height: 20,
-      borderRadius: 20,
-      overflow: 'hidden',
-      marginBottom: 0,
-    },
+  headerItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  userInfoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 0
+  },
+  userName: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#333'
+  },
+  userImageContainer: {
+    width: 20,
+    height: 20,
+    borderRadius: 20,
+    overflow: 'hidden',
+    marginBottom: 0,
+  },
   userImage: {
     width: '100%',
     height: '100%',
@@ -152,4 +159,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ServiceItem
+export default ServiceItem;

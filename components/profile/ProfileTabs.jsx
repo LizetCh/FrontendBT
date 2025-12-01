@@ -4,7 +4,7 @@ import { colors } from "../../constants/theme";
 import UserReviewsList from "../reviews/UserReviewsList";
 import UserServicesList from "../services/UserServicesList";
 
-export default function ProfileTabs({ userId }) {
+export default function ProfileTabs({ userId, onServicePress }) {
   const [activeTab, setActiveTab] = useState("services");
 
   return (
@@ -34,7 +34,7 @@ export default function ProfileTabs({ userId }) {
       {/* Contenido */}
       <View style={{ flex: 1, marginTop: 12 }}>
         {activeTab === "services" ? (
-          <UserServicesList userId={userId} />
+          <UserServicesList userId={userId} onServicePress={onServicePress} />
         ) : (
           <UserReviewsList userId={userId} />
         )}
@@ -46,7 +46,6 @@ export default function ProfileTabs({ userId }) {
 const styles = StyleSheet.create({
   container: { flex: 1 },
 
-  /** Tab bar **/
   tabBar: {
     flexDirection: "row",
     backgroundColor: colors.lightest,
