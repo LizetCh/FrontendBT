@@ -5,7 +5,7 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 import { api } from '../../api/axiosInstance';
 import { GradientButton } from '../GradientButton';
 
-const ServiceItem = ({ service, onPress }) => {   // ⬅️ agregado onPress
+const ServiceItem = ({ service, onPress }) => { 
   const router = useRouter();  
   
   const [userAvatar, setUserAvatar] = useState(null);
@@ -67,10 +67,10 @@ const ServiceItem = ({ service, onPress }) => {   // ⬅️ agregado onPress
           : service.description}
       </Text>
 
-      {/* 🔥 Botón multipropósito */}
+      {/*Botón multipropósito */}
       <GradientButton
         onPress={() => {
-          if (onPress) return onPress(service);      // ⬅️ navegación desde modal
+          if (onPress) return onPress(service); 
           
           // comportamiento original
           router.push({

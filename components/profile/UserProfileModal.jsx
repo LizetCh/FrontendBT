@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { api } from "../../api/axiosInstance";
 import { colors } from "../../constants/theme";
 
-import ServiceInfoItem from "../services/ServiceInfoItem"; // ⬅️ agregado
+import ServiceInfoItem from "../services/ServiceInfoItem";
 import ProfileTabs from "./ProfileTabs";
 import UserInfo from "./UserInfo";
 import UserRating from "./UserRating";
@@ -14,7 +14,7 @@ export default function UserProfileModal({ visible, onClose, userId }) {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  /** ⬇️ NUEVO: estados para navegación */
+  /** estados para navegación */
   const [view, setView] = useState("profile"); // profile | service
   const [selectedService, setSelectedService] = useState(null);
 
@@ -31,14 +31,14 @@ export default function UserProfileModal({ visible, onClose, userId }) {
 
   useEffect(() => {
     if (visible && userId) {
-      setView("profile");          // ⬅️ reiniciar vista al abrir modal
-      setSelectedService(null);    // ⬅️ limpiar servicio
+      setView("profile");         
+      setSelectedService(null);    
       setLoading(true);
       fetchProfile();
     }
   }, [visible, userId]);
 
-  /** ⬇️ función llamada desde ProfileTabs → UserServicesList → ServiceItem */
+  /** función llamada desde ProfileTabs → UserServicesList → ServiceItem */
   const handleServicePress = (service) => {
     setSelectedService(service);
     setView("service");
@@ -59,7 +59,7 @@ export default function UserProfileModal({ visible, onClose, userId }) {
             <Text style={styles.loadingText}>Cargando perfil...</Text>
           )}
 
-          {!loading && profile && view === "profile" && (   // ⬅️ render condicional
+          {!loading && profile && view === "profile" && (
             <ScrollView
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.scrollContent}
@@ -89,13 +89,13 @@ export default function UserProfileModal({ visible, onClose, userId }) {
               <View style={{ marginTop: 10 }}>
                 <ProfileTabs
                   userId={profile._id}
-                  onServicePress={handleServicePress}   // ⬅️ ahora sí se pasa
+                  onServicePress={handleServicePress} 
                 />
               </View>
             </ScrollView>
           )}
 
-          {/* 🔥 NUEVO: DETALLE DE SERVICIO DENTRO DEL MISMO MODAL */}
+          {/* DETALLE DE SERVICIO DENTRO DEL MISMO MODAL */}
           {!loading && view === "service" && selectedService && (
             <View style={{ flex: 1, paddingTop: 60 }}>
               {/* botón volver */}

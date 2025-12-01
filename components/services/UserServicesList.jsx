@@ -43,7 +43,7 @@ export default function UserServicesList({ userId, onServicePress }) {
         <ServiceItem
           key={service._id}
           service={service}
-          onPress={onServicePress}  // ⬅️ ESTA ES LA CORRECCIÓN
+          onPress={onServicePress} 
         />
       ))}
     </View>
