@@ -1,5 +1,7 @@
 
 //modal del formulario para agregar un nuevo servicio
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from 'expo-router';
 import { useState } from 'react';
 import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { api } from '../../api/axiosInstance';
@@ -43,16 +45,14 @@ const AddServiceModal = ({ visible, onClose, onAddService }) => {
       console.log('Nuevo servicio a agregar:', newService);
 
       //obtner jwt
-      /*
-      const jwt = await AsyncStorage.getItem('token');
-      if (!jwt) {
+      const token = await AsyncStorage.getItem("authToken");
+      if (!token) {
         alert('No se encontró el token de autenticación. Por favor, inicia sesión de nuevo.');
+        //mandar a login
         router.push('/login');
+        return;
       }
-      */
 
-      //BORRAR JWT DE PRUEBA ‼️‼️
-      const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc2NDUyODczMSwianRpIjoiMDA4MDBkNWQtNDFmNC00OGFmLTgxN2ItNTI3ZmI1ZWQ0YzhiIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjY4ZDliOTc4ZGYxOTEyYzg0NTI2OWQ1MiIsIm5iZiI6MTc2NDUyODczMSwiY3NyZiI6IjY5ZGQ5MmQzLTI2ODUtNDA4OC1hZTcyLTM5ODc2NDk5NmVhYyIsImV4cCI6MTc2NzEyMDczMX0.I_z7t8uBdDMqy8lofyRU8KQVLm5zOsTMmcvX7B_PPHk";
 
       //hacer POST
       await api.post(
@@ -60,7 +60,7 @@ const AddServiceModal = ({ visible, onClose, onAddService }) => {
         newService,
         {
           headers: {
-            Authorization: `Bearer ${jwt}`
+            Authorization: `Bearer ${token}`
           }
         }
       )
