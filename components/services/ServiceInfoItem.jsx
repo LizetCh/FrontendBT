@@ -285,11 +285,11 @@ const styles = StyleSheet.create({
   },
 
 infoCard: {
-  padding: 16,
+  padding: 18,
   borderRadius: 16,
   borderWidth: 1,
   borderColor: colors.light,
-  gap: 14,
+  gap: 11,
   flexDirection: "row",
   marginBottom: 10,
 },

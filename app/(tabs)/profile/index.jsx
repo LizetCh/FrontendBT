@@ -237,7 +237,7 @@ editButton: {
   flexDirection: "row",
   alignItems: "center",
   justifyContent: "center",
-  backgroundColor: colors.primary,
+  backgroundColor: colors.dark,
   padding: 12,
   borderRadius: 10,
   marginVertical: 14
@@ -246,7 +246,8 @@ editButtonText: {
   color: "white",
   fontSize: 16,
   marginLeft: 6,
-  fontWeight: "600"
+  fontWeight: "600",
+
 },
 hoursWrapper: {
   alignItems: "flex-end",

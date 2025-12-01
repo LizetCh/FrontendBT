@@ -44,7 +44,7 @@ const handleLogin = async () => {
     // Guardar el ID del usuario autenticado
     await AsyncStorage.setItem('authUserId', data.user._id);
 
-    Alert.alert ('Bienvenido', 'Inicio de sisón exitoso',[
+    Alert.alert ('Bienvenido', 'Inicio de sesión exitoso',[
       {text:'Continuar',
         onPress: () =>{
           router.push('./services');

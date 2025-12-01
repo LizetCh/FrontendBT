@@ -19,7 +19,7 @@ const ServiceInfo = () => {
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
             <Ionicons name="chevron-back" size={28} color={colors.primary} />
           </TouchableOpacity>
-          <Text style={{fontSize: 16, marginBottom: 16, color: colors.text}}>Información del servicio</Text>
+          <Text style={{fontSize: 16, marginBottom: 16, color: colors.darkest}}>Información del servicio</Text>
         </View>
         <View style={styles.separator} />
 
