@@ -38,7 +38,7 @@ const ServiceInfoItem =  ({ service }) => {
 
   useEffect(() => {
     fetchReviews();
-  });
+  },[service._id]);
 
    // Obtener usuario actual
   useEffect(() => {
