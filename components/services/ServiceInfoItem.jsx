@@ -206,6 +206,7 @@ const ServiceInfoItem =  ({ service }) => {
         serviceName={service.title}
         serviceLocation={service.location}
         providerName={service.owner_name}
+        providerId={service.owner_id}
         clientName={currentUser?.name}
         clientId={currentUser?._id}
       />

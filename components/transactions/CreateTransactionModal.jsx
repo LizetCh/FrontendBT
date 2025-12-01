@@ -1,16 +1,7 @@
 import { colors } from "@/constants/theme";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
-import {
-  Keyboard,
-  Modal,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View
-} from "react-native";
+import { Alert, Keyboard, Modal, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { api } from "../../api/axiosInstance";
 
 export default function CreateTransactionModal({
@@ -21,40 +12,67 @@ export default function CreateTransactionModal({
   serviceLocation,
   providerName,
   clientName,
-  clientId,
-  providerId
+  clientId,      
+  providerId   
 }) {
   const [hours, setHours] = useState("");
-const createTransaction = async () => {
-  try {
-    const token = await AsyncStorage.getItem('authToken'); 
 
-    if (!token) {
-      console.log("No hay token almacenado, el usuario no está autenticado");
-      return;
-    }
+  const createTransaction = async () => {
+    try {
+      /*console.log("Datos transaction");
+      console.log("serviceId:", serviceId);
+      console.log("clientId :", clientId);
+      console.log("supplierId:", providerId);
+      console.log("hours:", hours);*/
 
-    const res = await api.post(
-          "/transactions/create",
-          {
-            service_id: serviceId,
-            client_id: clientId,
-            hours: Number(hours)
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
+      // Validación para evitar transacción contigo mismo
+      if (String(clientId) === String(providerId)) {
+        Alert.alert(
+          "Acción no permitida",
+          "No puedes crear una transacción contigo mismo"
         );
-
-        console.log("Transacción creada:", res.data);
-        onClose();
-      } catch (error) {
-        console.log("Error creando transacción:", error.response?.data || error.message);
+        return;
       }
-    };
 
+      const token = await AsyncStorage.getItem("authToken");
+
+      if (!token) {
+        console.log("No hay token almacenado, el usuario no está autenticado");
+        return;
+      }
+
+      const payload = {
+        service_id: serviceId,
+        client_id: clientId,
+        supplier_id: providerId, 
+        hours: Number(hours)
+      };
+
+      const res = await api.post("/transactions/create", payload, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      console.log("Transacción creada:", res.data);
+      Alert.alert(
+          "¡Transacción creada!",
+          "Revisa Mis transacciones"
+        );
+      setHours("");
+      onClose();
+
+    } catch (error) {
+      console.log(
+        "Error creando transacción:",
+        error.response?.data || error.message
+      );
+      Alert.alert(
+          "¡Hubo un error!",
+          "Ocurrió un error al crear la transacción"
+        );
+    }
+  };
 
   return (
     <Modal visible={visible} transparent animationType="slide">
@@ -91,6 +109,7 @@ const createTransaction = async () => {
             <TouchableOpacity style={styles.cancelBtn} onPress={onClose}>
               <Text style={styles.cancelText}>Cancelar</Text>
             </TouchableOpacity>
+
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -110,8 +129,17 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 16,
   },
-  title: { fontSize: 24, fontWeight: "700", color: colors.primary, marginBottom: 16 },
-  label: { marginTop: 10, fontWeight: "600", color: colors.darkest },
+  title: { 
+    fontSize: 24, 
+    fontWeight: "700", 
+    color: colors.primary, 
+    marginBottom: 16 
+  },
+  label: { 
+    marginTop: 10, 
+    fontWeight: "600", 
+    color: colors.darkest 
+  },
   input: {
     borderWidth: 1,
     borderColor: "#CCC",

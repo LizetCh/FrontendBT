@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { api } from "../../api/axiosInstance";
@@ -8,15 +9,23 @@ export default function TransactionCard({ transaction, isPending, onAction }) {
   const [serviceName, setServiceName] = useState("Servicio");
   const [clientName, setClientName] = useState("Cargando...");
   const [clientAvatar, setClientAvatar] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  /** Obtener usuario actual **/
+  useEffect(() => {
+    AsyncStorage.getItem("authUserId").then((id) => setCurrentUser(id));
+  }, []);
+
+  const isClient = String(currentUser) === String(transaction.client_id);
+  const isProvider = String(currentUser) === String(transaction.supplier_id);
 
   /** Obtener servicio **/
   const fetchService = async () => {
     try {
       const res = await api.get("/services/");
-      const found = res.data.find(s => s._id === transaction.service_id);
+      const found = res.data.find((s) => s._id === transaction.service_id);
       setServiceName(found ? found.title : "Servicio desconocido");
     } catch (error) {
-      console.log("Error obteniendo servicio:", error.message);
       setServiceName("Servicio desconocido");
     }
   };
@@ -28,7 +37,6 @@ export default function TransactionCard({ transaction, isPending, onAction }) {
       setClientName(res.data.user.name);
       setClientAvatar(res.data.user.profile_image_url || null);
     } catch (error) {
-      console.log("Error obteniendo cliente:", error.message);
       setClientName("Usuario desconocido");
       setClientAvatar(null);
     }
@@ -39,10 +47,31 @@ export default function TransactionCard({ transaction, isPending, onAction }) {
     fetchClient();
   }, []);
 
+  /** Espera por respuesta de los usuarios**/
+  const waitingForSupplier =
+    transaction.status_client !== "pending" && transaction.status_supplier === "pending";
+  const waitingForClient =
+    transaction.status_supplier !== "pending" && transaction.status_client === "pending";
+
+  const showWaitingMessage =
+    (isClient && waitingForSupplier)
+      ? "Esperando respuesta del proveedor"
+      : (isProvider && waitingForClient)
+      ? "Esperando respuesta del cliente"
+      : null;
+
   /** Aceptar / Rechazar **/
   const updateTransaction = async (status) => {
     try {
-      await api.put(`/transactions/${transaction._id}`, { status_client: status });
+      const payload = isClient
+        ? { status_client: status }
+        : { status_supplier: status };
+
+      const token = await AsyncStorage.getItem("authToken");
+      await api.put(`/transactions/${transaction._id}`, payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
       if (onAction) onAction();
     } catch (error) {
       console.log("Error actualizando transacción:", error.message);
@@ -51,25 +80,26 @@ export default function TransactionCard({ transaction, isPending, onAction }) {
 
   return (
     <View style={styles.container}>
-
+      {/* Nombre del servicio */}
       <Text style={styles.title}>{serviceName}</Text>
 
-      {/* Informaciòn de la persona */}
+      {/* Info del cliente */}
       <View style={styles.userInfoContainer}>
-
-        {/* Foto de perfil */}
         {clientAvatar ? (
           <Image source={{ uri: clientAvatar }} style={styles.avatar} />
         ) : (
-          <Ionicons name="person-circle-outline" size={32} color={colors.primary} />
+          <Ionicons
+            name="person-circle-outline"
+            size={32}
+            color={colors.primary}
+          />
         )}
-
         <Text style={styles.userName}>{clientName}</Text>
       </View>
 
-      {/* Info card*/}
+      {/* Info card */}
       <View style={styles.infoCard}>
-        
+
         <View style={styles.infoRow}>
           <Ionicons name="time-outline" size={20} color={colors.primary} />
           <Text style={styles.infoText}>{transaction.hours} hrs</Text>
@@ -85,25 +115,37 @@ export default function TransactionCard({ transaction, isPending, onAction }) {
         </View>
       </View>
 
-      {/* Botones o estado */}
+      {/* Botones / Mensaje / Estado */}
       {isPending ? (
-        <View style={styles.buttonsContainer}>
-          <TouchableOpacity
-            style={[styles.button, styles.reject]}
-            onPress={() => updateTransaction("rejected")}
-          >
-            <Ionicons name="close-circle-outline" size={22} color="white" />
-            <Text style={styles.btnText}>Rechazar</Text>
-          </TouchableOpacity>
+        showWaitingMessage ? (
+          <Text style={styles.waitingText}>{showWaitingMessage}</Text>
+        ) : (
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity
+              style={[styles.button, styles.reject]}
+              onPress={() => updateTransaction("rejected")}
+            >
+              <Ionicons
+                name="close-circle-outline"
+                size={22}
+                color="white"
+              />
+              <Text style={styles.btnText}>Rechazar</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[styles.button, styles.accept]}
-            onPress={() => updateTransaction("accepted")}
-          >
-            <Ionicons name="checkmark-circle-outline" size={22} color="white" />
-            <Text style={styles.btnText}>Aceptar</Text>
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              style={[styles.button, styles.accept]}
+              onPress={() => updateTransaction("accepted")}
+            >
+              <Ionicons
+                name="checkmark-circle-outline"
+                size={22}
+                color="white"
+              />
+              <Text style={styles.btnText}>Aceptar</Text>
+            </TouchableOpacity>
+          </View>
+        )
       ) : (
         <View
           style={[
@@ -149,7 +191,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 
-  avatar: { 
+  avatar: {
     width: 32,
     height: 32,
     borderRadius: 16,
@@ -183,6 +225,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.darkest,
     fontWeight: "600",
+  },
+
+  waitingText: {
+    textAlign: "center",
+    fontSize: 16,
+    marginTop: 6,
+    fontWeight: "700",
+    color: colors.primary,
   },
 
   buttonsContainer: {
