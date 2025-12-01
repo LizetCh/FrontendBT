@@ -3,6 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 import { api } from "../../api/axiosInstance";
 import { GradientButton } from "../GradientButton";
 import UserProfileModal from "../profile/UserProfileModal";
@@ -24,6 +25,7 @@ const ServiceInfoItem =  ({ service }) => {
   const [transactionVisible, setTransactionVisible] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [providerProfileVisible, setProviderProfileVisible] = useState(false);
+  const [loadingUser, setLoadingUser] = useState(true);
 
   const [userAvatar, setUserAvatar] = useState(null);
   
@@ -64,6 +66,7 @@ const ServiceInfoItem =  ({ service }) => {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCurrentUser(res.data.user);
+        setLoadingUser(false);
       } catch (error) {
         console.log("Error cargando usuario:", error.message);
       }
@@ -97,7 +100,14 @@ const ServiceInfoItem =  ({ service }) => {
 
     
 
-    
+    //si no se ha cargado poner un spinner indicador de carga
+    if (!currentUser || !reviews) {
+      return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#fff" , marginTop: 100}}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+      );
+    }
 
 
     
@@ -167,10 +177,16 @@ const ServiceInfoItem =  ({ service }) => {
         {description}
       </Text>
 
-      <GradientButton
-        onPress={() => setTransactionVisible(true)}
-        title='Crear transacción'
-      />
+
+      {/*Botón para crear transacción
+      No mostrar si el servicio es de uno mismo*/}
+      
+      {!loadingUser && currentUser?._id !== service.owner_id && (
+        <GradientButton
+          onPress={() => setTransactionVisible(true)}
+          title='Crear transacción'
+        />
+      )}
 
       <View style={styles.separator} />
 
